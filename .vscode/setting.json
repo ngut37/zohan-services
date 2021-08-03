@@ -1,0 +1,5 @@
+{
+  "cSpell.enabled": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "eslint.validate": ["javascript", "typescript"]
+}

@@ -1,0 +1,31 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "zohan-service 💈 - develop",
+      "program": "${workspaceFolder}/src/app.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"],
+      "runtimeArgs": ["--nolazy"],
+      "sourceMaps": true,
+      "protocol": "inspector",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Auth 🔒 - develop",
+      "args": ["${workspaceFolder}/build/app.js"],
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "runtimeArgs": ["--nolazy"],
+      "sourceMaps": true,
+      "protocol": "inspector",
+      "console": "integratedTerminal"
+    }
+  ]
+}
