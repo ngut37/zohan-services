@@ -1,3 +1,10 @@
+# project build-folders
 node_modules
 dist
+build
+
+# macOS folder metadata
+.DS_Store
+
+# environment
 .env
