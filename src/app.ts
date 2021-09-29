@@ -1,6 +1,13 @@
-import Koa from 'koa';
+require('dotenv').config();
+import cors from '@koa/cors';
+import logger from 'koa-logger';
+import bodyParser from 'koa-bodyparser';
 
-import { config } from './config';
+import Koa from 'koa';
+import { connect } from 'mongoose';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 try {
   const app = new Koa();
@@ -8,7 +15,28 @@ try {
 
   const port = config.get('PORT');
 
+  // mongoose connect
+  connect(
+    config.get(CONFIG_KEYS.MONGO_URL),
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => console.log('Connected to DB!'),
+  );
+
+  app.use(
+    cors({
+      credentials: true,
+    }),
+  );
+  app.use(logger());
+
+  app.use(
+    bodyParser({
+      enableTypes: ['json'],
+    }),
+  );
+
   app.use(router.routes());
+  app.use(router.allowedMethods());
   app.listen(port);
 
   console.clear();

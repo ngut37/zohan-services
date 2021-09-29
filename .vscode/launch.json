@@ -11,21 +11,19 @@
       "program": "${workspaceFolder}/src/app.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": ["${workspaceFolder}/build/**/*.js"],
-      "runtimeArgs": ["--nolazy"],
+      "runtimeArgs": [
+        "-r",
+        "${workspaceFolder}/node_modules/ts-node/register",
+        "-r",
+        "${workspaceFolder}/node_modules/tsconfig-paths/register"
+      ],
       "sourceMaps": true,
       "protocol": "inspector",
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Auth 🔒 - develop",
-      "args": ["${workspaceFolder}/build/app.js"],
-      "preLaunchTask": "tsc: build - tsconfig.json",
-      "runtimeArgs": ["--nolazy"],
-      "sourceMaps": true,
-      "protocol": "inspector",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "development",
+        "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
+      },
     }
   ]
 }

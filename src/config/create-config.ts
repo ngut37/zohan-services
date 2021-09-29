@@ -6,12 +6,6 @@ export const createConfig = (envs: Environments, defaultConfig: Config) => {
   // ENVIRONMENT ENV VARIABLE
   const APP_ENV = (process.env.APP_ENV as EnvironmentName) || 'development';
 
-  // type X = string;
-
-  // const x: X = 6;
-
-  // console.log(x);
-
   // MERGE DEFAULT CONFIG
   let defaults: Config = {
     APP_ENV,
