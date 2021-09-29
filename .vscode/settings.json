@@ -2,5 +2,9 @@
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
   "prettier.endOfLine": "auto",
-  "prettier.singleQuote": true
+  "prettier.singleQuote": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.ignorePaths": [
+    ".gcloudignore"
+  ]
 }

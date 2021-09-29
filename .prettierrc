@@ -9,5 +9,6 @@
   "useTabs": false,
   "tabWidth": 2,
   "parser": "typescript",
-  "printWidth": 80
+  "printWidth": 80,
+  "endOfLine":"auto"
 }
