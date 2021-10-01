@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node build/app.js",
     "dev": "ts-node src/app.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "lint:check": "eslint --ext .ts src",
+    "lint:fix": "eslint --fix --ext .ts src"
   },
   "author": "",
   "license": "ISC",
