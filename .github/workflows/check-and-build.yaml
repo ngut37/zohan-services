@@ -1,0 +1,16 @@
+name: Check and build
+
+on: [push]
+
+jobs:
+  check-and-build:
+    name: Check 🔎 and build 📦
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn
+      - name: Lint check
+        run: yarn lint:check
+      - name: Build check
+        run: yarn build
