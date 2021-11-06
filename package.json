@@ -4,9 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node build/app.js",
+    "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
     "dev": "ts-node -r tsconfig-paths/register src/app.ts",
-    "build": "tsc --p ./tsconfig.json",
+    "gcp-build": "tsc --p tsconfig.json",
+    "build": "tsc --p tsconfig.json",
     "lint:check": "eslint --ext .ts src",
     "lint:fix": "eslint --fix --ext .ts src"
   },
@@ -25,7 +26,9 @@
     "koa-jwt": "^4.0.1",
     "koa-router": "^10.0.0",
     "mongoose": "^5.9.27",
-    "nconf": "^0.11.3"
+    "nconf": "^0.11.3",
+    "tsconfig-paths": "^3.11.0",
+    "ts-node": "^8.10.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -47,12 +50,9 @@
     "eslint-plugin-prettier": "^3.4.1",
     "git-cz": "3.0.1",
     "husky": "4",
-    "koa-logger": "^3.2.1",
     "lint-staged": "^11.1.2",
     "nodemon": "^2.0.6",
     "prettier": "^2.3.2",
-    "ts-node": "^8.10.2",
-    "tsconfig-paths": "^3.11.0",
     "typescript": "^4.3.5"
   },
   "lint-staged": {

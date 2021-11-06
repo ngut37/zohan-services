@@ -6,5 +6,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "cSpell.ignorePaths": [
     ".gcloudignore"
-  ]
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

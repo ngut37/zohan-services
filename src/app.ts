@@ -1,6 +1,5 @@
 require('dotenv').config();
 import cors from '@koa/cors';
-import logger from 'koa-logger';
 import bodyParser from 'koa-bodyparser';
 
 import Koa from 'koa';
@@ -27,7 +26,6 @@ try {
       credentials: true,
     }),
   );
-  app.use(logger());
 
   app.use(
     bodyParser({
@@ -39,7 +37,6 @@ try {
   app.use(router.allowedMethods());
   app.listen(port);
 
-  console.clear();
   console.log(`💈 Zohan services listening on port: ${port} 🎧`);
 } catch (e) {
   console.error(e);

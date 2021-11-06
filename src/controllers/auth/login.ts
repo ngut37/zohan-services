@@ -54,17 +54,21 @@ router.route({
       const accessToken = userFoundByEmail.generateAccessToken();
       const refreshToken = userFoundByEmail.generateRefreshToken();
 
+      const productionEnvironment =
+        config.get(CONFIG_KEYS.APP_ENV) === 'production';
+
+      // ! this is a hack to make deployed front-end working
+      ctx.cookies.secure = productionEnvironment;
+
       ctx.cookies.set('access_token', accessToken, {
         httpOnly: true,
         sameSite: 'none',
-        secureProxy: true,
-        secure: config.get(CONFIG_KEYS.APP_ENV) === 'production',
+        secure: productionEnvironment,
       });
       ctx.cookies.set('refresh_token', refreshToken, {
         httpOnly: true,
         sameSite: 'none',
-        secureProxy: true,
-        secure: config.get(CONFIG_KEYS.APP_ENV) === 'production',
+        secure: productionEnvironment,
       });
 
       ctx.body = { success: true };

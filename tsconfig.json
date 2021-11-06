@@ -8,19 +8,19 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "stripInternal": true,
-    "noEmit": true,
     "resolveJsonModule": true,
-    "incremental": true,
+    "incremental": false,
+    "noEmit": false,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "outDir": "build",
-    "baseUrl": "src",
+    "outDir": "./build",
+    "baseUrl": "./src",
     "paths": {
       "@config/*": ["./config/*"],
       "@models/*": ["./models/*"],
       "@utils/*": ["./utils/*"]
     }
   },
-  "include": ["**/*.js", "**/*.ts"],
+  "include": ["./config", "**/*.js", "**/*.ts"],
   "exclude": ["node_modules", "**/build/**"]
 }

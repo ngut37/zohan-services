@@ -21,10 +21,9 @@ export const config = createConfig(
   {
     development: {},
     test: {},
-    production: {
-      MONGO_URL:
-        'mongodb+srv://zohan_app_engine:5ltjuNvuVU4HFRRI@zohan.7jeef.mongodb.net/zohan?retryWrites=true&w=majority',
-    },
+    production: {},
   },
   defaultConfig,
 );
+
+('');
