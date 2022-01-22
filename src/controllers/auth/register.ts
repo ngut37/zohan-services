@@ -1,9 +1,10 @@
 import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
+import { generateEmailRegex } from '@utils/email';
+
 import { Gender, GENDERS, Role, ROLES } from '@models/users/types';
 import { User } from '@models/users/user';
-import { generateEmailRegex } from '@utils/email';
 
 /* Example request body
   {
@@ -35,7 +36,7 @@ type RequestBody = {
 const requestBodySchema = {
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().required(),
   birthYear: Joi.number().allow(null).min(minBirthYear).max(maxBirthYear),
   gender: Joi.string().valid(...Object.values(GENDERS)),

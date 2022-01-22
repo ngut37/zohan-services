@@ -3,14 +3,14 @@ import { verify, VerifyOptions } from 'jsonwebtoken';
 import { Role } from '@models/users/types';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
+import { UserAttributes } from '@models/users/user';
 
 export type RefreshTokenPayload = {
   userId: string;
 };
 
-export type AccessTokenPayload = RefreshTokenPayload & {
-  roles: Role[];
-};
+export type AccessTokenPayload = RefreshTokenPayload &
+  Pick<UserAttributes, 'firstName' | 'lastName' | 'roles'>;
 
 export type AuthUtils = {
   hasRole: (this: ExtendedAccessTokenPayload, role: Role) => boolean;

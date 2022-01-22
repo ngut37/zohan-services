@@ -8,7 +8,12 @@ import { AccessTokenPayload } from '@utils/auth';
 import { User } from '../user';
 
 export function generateAccessToken(this: User) {
-  const payload: AccessTokenPayload = { userId: this.id, roles: this.roles };
+  const payload: AccessTokenPayload = {
+    userId: this.id,
+    roles: this.roles,
+    firstName: this.firstName,
+    lastName: this.lastName,
+  };
 
   const generatedToken = sign(
     payload,

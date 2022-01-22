@@ -49,11 +49,13 @@ router.route({
       // generate new access token
       const newAccessToken = user.generateAccessToken();
 
+      const { password: _pw, ...publicUser } = user.toObject();
+
       ctx.cookies.set('access_token', newAccessToken, { httpOnly: true });
 
       ctx.body = {
         success: true,
-        data: { user: accessTokenPayload },
+        data: { tokenPayload: accessTokenPayload, user: publicUser },
       };
     },
   ],

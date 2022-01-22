@@ -9,14 +9,16 @@ import { validateUserRefreshToken } from './methods/validate-refresh-token';
 
 import { Gender, GENDERS, Role, ROLES } from './types';
 
+export type Password = {
+  hash: string;
+  salt: string;
+};
+
 export type UserAttributes = {
   firstName: string;
   lastName: string;
   email: string;
-  password: {
-    hash: string;
-    salt: string;
-  };
+  password: Password;
   birthDate: Date;
   gender: Gender;
   roles: Role[];
@@ -24,7 +26,7 @@ export type UserAttributes = {
 
 export type UserMethods = {
   /**
-   *  Assigns hash and salt to the password object only. The document is not saved during this method.
+   *  Assigns hash and salt to the password object only. The document is not saved after this method.
    */
   assignHashSaltPair: typeof assignHashSaltPair;
   validatePassword: typeof validatePassword;
