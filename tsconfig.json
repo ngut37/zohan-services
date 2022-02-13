@@ -18,7 +18,8 @@
     "paths": {
       "@config/*": ["./config/*"],
       "@models/*": ["./models/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@middlewares/*": ["./controllers/middlewares/*"]
     }
   },
   "include": ["./config", "**/*.js", "**/*.ts"],

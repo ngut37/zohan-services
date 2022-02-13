@@ -1,3 +1,4 @@
+// ! WIP, not safe for production
 import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
@@ -8,27 +9,18 @@ import { generateEmailRegex } from '@utils/email';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-/* Example request body
-  {
-    "email": "johndoe@email.com",
-    "password": "123456"
-  }
-*/
-
 const router = joiRouter();
 
 type RequestBody = {
   email: string;
-  password: string;
 };
 
 const requestBodySchema = {
   email: Joi.string().required(),
-  password: Joi.string().required(),
 };
 
 router.route({
-  path: '/login',
+  path: '/o-auth-login',
   method: 'post',
   validate: {
     body: requestBodySchema,
@@ -36,9 +28,7 @@ router.route({
   },
   handler: [
     async (ctx: ParameterizedContext) => {
-      // body
-      const body = ctx.request.body as RequestBody;
-      const { email, password } = body;
+      const { email } = ctx.request.body as RequestBody;
 
       const emailRegex = generateEmailRegex(email);
 
@@ -47,10 +37,6 @@ router.route({
       });
 
       if (!userFoundByEmail) return ctx.throw(401, 'Incorrect credentials.');
-
-      const isValidPassword = await userFoundByEmail.validatePassword(password);
-
-      if (!isValidPassword) return ctx.throw(401, 'Incorrect credentials.');
 
       // generate JWT access-refresh pair
       const accessToken = userFoundByEmail.generateAccessToken();

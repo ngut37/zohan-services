@@ -1,9 +1,11 @@
 import { ParameterizedContext } from 'koa';
 import joiRouter from 'koa-joi-router';
 
-import { protectRouteMiddleware } from 'controllers/middlewares/access-token';
-import { ExtendedAccessTokenPayload } from '@utils/auth';
-import { User } from '@models/users/user';
+import { User } from '@models/user';
+
+import { AccessTokenPayload } from '@utils/auth';
+
+import { protectRouteMiddleware } from '@middlewares/access-token';
 
 const router = joiRouter();
 
@@ -13,8 +15,8 @@ router.route({
   handler: [
     protectRouteMiddleware({ allowUnauthorized: false }),
     async (ctx: ParameterizedContext) => {
-      const authUser = ctx.state.auth as ExtendedAccessTokenPayload;
-      const user = await User.findById(authUser.userId, { password: 0 });
+      const authUser = ctx.state.auth as AccessTokenPayload;
+      const user = await User.findById(authUser.id, { password: 0 });
 
       ctx.body = {
         success: true,

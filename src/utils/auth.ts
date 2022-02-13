@@ -1,23 +1,16 @@
 import { verify, VerifyOptions } from 'jsonwebtoken';
 
-import { Role } from '@models/users/types';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
-import { UserAttributes } from '@models/users/user';
 
-export type RefreshTokenPayload = {
-  userId: string;
-};
+import { User } from '@models/user';
 
-export type AccessTokenPayload = RefreshTokenPayload &
-  Pick<UserAttributes, 'firstName' | 'lastName' | 'roles'>;
+export type RefreshTokenPayload = Pick<User, 'id'>;
 
-export type AuthUtils = {
-  hasRole: (this: ExtendedAccessTokenPayload, role: Role) => boolean;
-  hasOneOfRoles: (this: ExtendedAccessTokenPayload, roles: Role[]) => boolean;
-};
-
-export type ExtendedAccessTokenPayload = AccessTokenPayload & AuthUtils;
+export type AccessTokenPayload = Pick<
+  User,
+  'id' | 'name' | 'email' | 'phoneNumber' | 'oAuth' | 'avatarUrl'
+>;
 
 export const validateAccessToken = (
   token: string,
@@ -45,19 +38,4 @@ export const validateRefreshToken = (token: string) => {
   } catch {
     return undefined;
   }
-};
-
-export const authUtils: AuthUtils = {
-  hasRole: function (role: Role) {
-    return this.roles.includes(role);
-  },
-  hasOneOfRoles: function (roles: Role[]) {
-    return roles.some((role: Role) => this.roles.includes(role));
-  },
-};
-
-export const extendAuth = (
-  auth: AccessTokenPayload,
-): ExtendedAccessTokenPayload => {
-  return Object.assign(auth, authUtils);
 };

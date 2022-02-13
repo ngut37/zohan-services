@@ -6,6 +6,8 @@ import registerRouter from './register';
 import updateRouter from './update';
 import getRouter from './get';
 import meRouter from './me';
+import userExistsByEmailRouter from './user-exists-by-email';
+import oAuthLoginRouter from './o-auth-login';
 
 const router = joiRouter();
 
@@ -17,5 +19,7 @@ router.use(registerRouter.middleware());
 router.use(updateRouter.middleware());
 router.use(getRouter.middleware());
 router.use(meRouter.middleware());
+router.use(userExistsByEmailRouter.middleware());
+router.use(oAuthLoginRouter.middleware());
 
 export default router;

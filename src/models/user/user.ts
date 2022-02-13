@@ -7,21 +7,18 @@ import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
 
-import { Gender, GENDERS, Role, ROLES } from './types';
-
-export type Password = {
-  hash: string;
-  salt: string;
-};
+import { OAuthType, O_AUTH_TYPES, Password } from './types';
 
 export type UserAttributes = {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  password: Password;
-  birthDate: Date;
-  gender: Gender;
-  roles: Role[];
+  phoneNumber: string;
+  password?: Password;
+  oAuth?: {
+    userId: string;
+    type: OAuthType;
+  };
+  avatarUrl?: string;
 };
 
 export type UserMethods = {
@@ -40,11 +37,7 @@ export type User = UserAttributes & UserMethods & Document;
 
 const schema: Schema<UserMethods> = new Schema(
   {
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
+    name: {
       type: String,
       required: true,
     },
@@ -53,19 +46,16 @@ const schema: Schema<UserMethods> = new Schema(
       required: true,
       unique: true,
     },
+    phoneNumber: String,
     password: {
-      hash: {
-        type: String,
-        required: true,
-      },
-      salt: {
-        type: String,
-        required: true,
-      },
+      hash: String,
+      salt: String,
     },
-    birthDate: Date,
-    gender: { type: String, enum: Object.keys(GENDERS) },
-    roles: { type: [String], enum: Object.keys(ROLES) },
+    oAuth: {
+      userId: String,
+      type: { type: String, enum: Object.keys(O_AUTH_TYPES) },
+    },
+    avatarUrl: String,
   },
   { timestamps: true },
 );

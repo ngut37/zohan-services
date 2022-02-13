@@ -3,46 +3,54 @@ import joiRouter, { Joi } from 'koa-joi-router';
 
 import { generateEmailRegex } from '@utils/email';
 
-import { Gender, GENDERS, Role, ROLES } from '@models/users/types';
-import { User } from '@models/users/user';
+import { User } from '@models/user';
+import { OAuthType, O_AUTH_TYPES } from '@models/user/types';
+
+import { formatPhoneNumber } from '@utils/phone-number';
 
 /* Example request body
+  Local auth system sign up
   {
-    "firstName": "John",
-    "lastName": "Doe",
+    "name": "John Doe",
     "email": "johndoe@email.com",
-    "password": "123456",
-    "birthYear": "1999",
-    "gender": "male",
-    "roles": ["client"]
+    "password": "123456"
+  }
+
+  OAuth sign up
+  {
+    "name": "John Doe",
+    "email": "johndoe@google.com",
+    "oAuth": {
+      "userId": "116546600935596",
+      "type": "facebook"
+    }
   }
 */
-
-const minBirthYear = 1900;
-const maxBirthYear = new Date().getFullYear();
 
 const router = joiRouter();
 
 type RequestBody = {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  password: string;
-  birthYear: number;
-  gender: Gender;
-  roles: Role[];
+  password?: string;
+  phoneNumber?: string;
+  oAuth?: {
+    userId: string;
+    type: OAuthType;
+  };
 };
 
 const requestBodySchema = {
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().required(),
-  birthYear: Joi.number().allow(null).min(minBirthYear).max(maxBirthYear),
-  gender: Joi.string().valid(...Object.values(GENDERS)),
-  roles: Joi.array()
-    .items(Joi.string().valid(...Object.keys(ROLES)))
-    .required(),
+  password: Joi.string(),
+  phoneNumber: Joi.string(),
+  oAuth: {
+    userId: Joi.string().required(),
+    type: Joi.string()
+      .valid(...Object.keys(O_AUTH_TYPES))
+      .required(),
+  },
 };
 
 router.route({
@@ -55,10 +63,9 @@ router.route({
   handler: [
     async (ctx: ParameterizedContext) => {
       const body = ctx.request.body as RequestBody;
-      const { firstName, lastName, email, password, gender, birthYear, roles } =
-        body;
+      const { name, email, password, phoneNumber, oAuth } = body;
 
-      // Check for email duplicity. Make the periods
+      // check for email duplicity. Make the periods
       const emailRegex = generateEmailRegex(email);
       const userFoundByEmail = await User.findOne({
         email: { $regex: emailRegex },
@@ -68,14 +75,27 @@ router.route({
 
       // create user
       const user = new User({
-        firstName,
-        lastName,
+        name,
         email,
-        gender,
-        birthYear: new Date(birthYear, 0, 1),
-        roles,
       });
-      await user.assignHashSaltPair(password);
+
+      if (phoneNumber) {
+        const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+        user.phoneNumber = formattedPhoneNumber;
+      }
+
+      // skip password handler in case of oAuth user
+      if (oAuth) {
+        const { userId, type } = oAuth;
+        user.oAuth = { userId, type };
+        await user.save();
+        return;
+      } else if (password) {
+        await user.assignHashSaltPair(password);
+      } else {
+        ctx.throw(400);
+      }
+
       await user.save();
 
       // generate JWT access-refresh pair

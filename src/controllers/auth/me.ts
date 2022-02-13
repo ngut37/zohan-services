@@ -3,7 +3,8 @@ import { ParameterizedContext } from 'koa';
 import { ObjectId } from 'mongodb';
 
 import { validateAccessToken, validateRefreshToken } from '@utils/auth';
-import { User } from '@models/users/user';
+
+import { User } from '@models/user';
 
 const router = joiRouter();
 
@@ -32,8 +33,8 @@ router.route({
       }
 
       // compare access and refresh token userId
-      const { userId: accessUserId } = accessTokenPayload;
-      const { userId: refreshUserId } = refreshTokenPayload;
+      const { id: accessUserId } = accessTokenPayload;
+      const { id: refreshUserId } = refreshTokenPayload;
       if (accessUserId !== refreshUserId) {
         return ctx.throw(401);
       }

@@ -3,16 +3,17 @@ import { sign } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { AccessTokenPayload } from '@utils/auth';
+import { CompanyAccessTokenPayload } from '@utils/company-auth';
 
-import { User } from '../user';
+import { CompanyUser } from '../company-user';
 
-export function generateAccessToken(this: User) {
-  const payload: AccessTokenPayload = {
+export function generateAccessToken(this: CompanyUser) {
+  const payload: CompanyAccessTokenPayload = {
     userId: this.id,
+    name: this.name,
+    email: this.email,
     roles: this.roles,
-    firstName: this.firstName,
-    lastName: this.lastName,
+    company: this.company,
   };
 
   const generatedToken = sign(

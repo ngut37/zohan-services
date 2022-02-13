@@ -6,6 +6,7 @@ export async function validatePassword(
   this: User,
   plainPassword: string,
 ): Promise<boolean> {
+  if (!this.password) return false;
   const { salt, hash: hashedPassword } = this.password;
   let generatedHash = '';
   try {
