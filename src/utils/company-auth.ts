@@ -3,7 +3,7 @@ import { verify, VerifyOptions } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { StaffAttributes } from '@models/company-user';
+import { StaffAttributes } from '@models/staff';
 import { Role } from '@models/shared/roles';
 
 export type CompanyRefreshTokenPayload = {
@@ -11,7 +11,7 @@ export type CompanyRefreshTokenPayload = {
 };
 
 export type CompanyAccessTokenPayload = CompanyRefreshTokenPayload &
-  Pick<StaffAttributes, 'name' | 'email' | 'roles' | 'company'>;
+  Pick<StaffAttributes, 'name' | 'email' | 'role' | 'company'>;
 
 export type CompanyAuthUtils = {
   hasRole: (this: ExtendedCompanyAccessTokenPayload, role: Role) => boolean;
@@ -54,10 +54,10 @@ export const validateCompanyRefreshToken = (token: string) => {
 
 export const authUtils: CompanyAuthUtils = {
   hasRole: function (role: Role) {
-    return this.roles.includes(role);
+    return this.role === role;
   },
   hasOneOfRoles: function (roles: Role[]) {
-    return roles.some((role: Role) => this.roles.includes(role));
+    return roles.some((role: Role) => this.role === role);
   },
 };
 

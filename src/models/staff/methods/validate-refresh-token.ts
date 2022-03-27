@@ -1,6 +1,6 @@
 import { validateCompanyRefreshToken } from '@utils/company-auth';
 
-import { Staff } from '../company-user';
+import { Staff } from '../staff';
 
 export function validateUserRefreshToken(this: Staff, token: string) {
   const payload = validateCompanyRefreshToken(token);

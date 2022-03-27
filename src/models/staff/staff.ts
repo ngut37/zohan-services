@@ -12,6 +12,8 @@ import { generateAccessToken } from './methods/generate-access-token';
 import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
+import { Timestamps } from '@models/shared/timestamp';
+import { Venue } from '@models/venue';
 
 export type StaffMethods = {
   /**
@@ -26,14 +28,18 @@ export type StaffMethods = {
   validateRefreshToken: typeof validateUserRefreshToken;
 };
 
-export type StaffAttributes = {
-  _id: ObjectId;
+export type RawStaff = {
   name: string;
   email: string;
   password: Password;
-  roles: Role[];
-  company: Company;
+  role: Role;
+  company: Company['_id'];
+  venue?: Venue['_id'];
 };
+
+export type StaffAttributes = RawStaff & {
+  _id: ObjectId;
+} & Timestamps;
 
 type StaffModel = Model<StaffAttributes, Record<any, never>, StaffMethods>;
 
@@ -56,7 +62,11 @@ const schema = new Schema<StaffAttributes, StaffModel, StaffMethods>(
       ref: 'Company',
       required: true,
     },
-    roles: roleSchema,
+    venue: {
+      type: String,
+      ref: 'Venue',
+    },
+    role: roleSchema,
   },
   { timestamps: true },
 );
