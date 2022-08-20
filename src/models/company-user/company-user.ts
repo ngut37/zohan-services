@@ -1,7 +1,10 @@
-import { Schema, Document } from 'mongoose';
+import { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
 
 import { Password, passwordSchema } from '@models/shared';
 import { Company } from '@models/company';
+
+import { Role, roleSchema } from '../shared/roles';
+import { mongoose } from '..';
 
 import { assignHashSaltPair } from './methods/generate-hash-salt-pair';
 import { validatePassword } from './methods/validate-password';
@@ -10,21 +13,10 @@ import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
 
-import { mongoose } from '..';
-
-import { Role, ROLES } from './types';
-
-export type CompanyUserAttributes = {
-  name: string;
-  email: string;
-  password: Password;
-  roles: Role[];
-  company: Company;
-};
-
-export type CompanyUserMethods = {
+export type StaffMethods = {
   /**
-   *  Assigns hash and salt to the password object only. The document is not saved after this method.
+   * Assigns hash and salt to the password object only.
+   * The document is not saved after calling this method.
    */
   assignHashSaltPair: typeof assignHashSaltPair;
   validatePassword: typeof validatePassword;
@@ -34,9 +26,20 @@ export type CompanyUserMethods = {
   validateRefreshToken: typeof validateUserRefreshToken;
 };
 
-export type CompanyUser = CompanyUserAttributes & CompanyUserMethods & Document;
+export type StaffAttributes = {
+  _id: ObjectId;
+  name: string;
+  email: string;
+  password: Password;
+  roles: Role[];
+  company: Company;
+};
 
-const schema: Schema<CompanyUserMethods> = new Schema(
+type StaffModel = Model<StaffAttributes, Record<any, never>, StaffMethods>;
+
+export type Staff = HydratedDocument<StaffAttributes, StaffMethods>;
+
+const schema = new Schema<StaffAttributes, StaffModel, StaffMethods>(
   {
     name: {
       type: String,
@@ -47,13 +50,13 @@ const schema: Schema<CompanyUserMethods> = new Schema(
       required: true,
       unique: true,
     },
-    password: passwordSchema,
+    password: { type: passwordSchema, required: true },
     company: {
       type: String,
       ref: 'Company',
       required: true,
     },
-    roles: { type: [String], enum: Object.keys(ROLES) },
+    roles: roleSchema,
   },
   { timestamps: true },
 );
@@ -69,8 +72,8 @@ schema.method('validateUserAccessToken', validateUserAccessToken);
 schema.method('generateRefreshToken', generateRefreshToken);
 schema.method('validateRefreshToken', validateUserRefreshToken);
 
-export const CompanyUser = mongoose.model<CompanyUser>(
-  'CompanyUser',
+export const Staff = mongoose.model<StaffAttributes, StaffModel>(
+  'Staff',
   schema,
-  'companyUsers',
+  'staff',
 );

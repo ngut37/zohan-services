@@ -3,10 +3,9 @@ import cors from '@koa/cors';
 import bodyParser from 'koa-bodyparser';
 
 import Koa from 'koa';
-import { connect } from 'mongoose';
 
 import { config } from '@config/config';
-import { CONFIG_KEYS } from '@config/keys';
+import { initMongoose } from './models';
 
 try {
   const app = new Koa();
@@ -15,11 +14,7 @@ try {
   const port = config.get('PORT');
 
   // mongoose connect
-  connect(
-    config.get(CONFIG_KEYS.MONGO_URL),
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => console.log('Connected to DB!'),
-  );
+  initMongoose(() => console.log('Connected to DB!'));
 
   app.use(
     cors({

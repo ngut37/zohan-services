@@ -1,9 +1,9 @@
 import { hash } from 'bcrypt';
 
-import { CompanyUser } from '../company-user';
+import { Staff } from '../company-user';
 
 export async function validatePassword(
-  this: CompanyUser,
+  this: Staff,
   plainPassword: string,
 ): Promise<boolean> {
   const { salt, hash: hashedPassword } = this.password;

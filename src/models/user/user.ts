@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
 
 import { assignHashSaltPair } from './methods/generate-hash-salt-pair';
 import { validatePassword } from './methods/validate-password';
@@ -7,19 +7,9 @@ import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
 
-import { OAuthType, O_AUTH_TYPES, Password } from './types';
-
-export type UserAttributes = {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password?: Password;
-  oAuth?: {
-    userId: string;
-    type: OAuthType;
-  };
-  avatarUrl?: string;
-};
+import { OAuthType, O_AUTH_TYPES } from './types';
+import { Timestamps } from '@models/shared/timestamp';
+import { Password, passwordSchema } from '@models/shared';
 
 export type UserMethods = {
   /**
@@ -33,9 +23,24 @@ export type UserMethods = {
   validateRefreshToken: typeof validateUserRefreshToken;
 };
 
-export type User = UserAttributes & UserMethods & Document;
+export type UserAttributes = {
+  _id: ObjectId;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: Password;
+  oAuth?: {
+    userId: string;
+    type: OAuthType;
+  };
+  avatarUrl?: string;
+} & Timestamps;
 
-const schema: Schema<UserMethods> = new Schema(
+type UserModel = Model<UserAttributes, Record<any, never>, UserMethods>;
+
+export type User = HydratedDocument<UserAttributes, UserMethods>;
+
+const schema = new Schema<UserAttributes, UserModel, UserMethods>(
   {
     name: {
       type: String,
@@ -47,10 +52,7 @@ const schema: Schema<UserMethods> = new Schema(
       unique: true,
     },
     phoneNumber: String,
-    password: {
-      hash: String,
-      salt: String,
-    },
+    password: { type: passwordSchema, required: true },
     oAuth: {
       userId: String,
       type: { type: String, enum: Object.keys(O_AUTH_TYPES) },
@@ -71,4 +73,8 @@ schema.method('validateUserAccessToken', validateUserAccessToken);
 schema.method('generateRefreshToken', generateRefreshToken);
 schema.method('validateRefreshToken', validateUserRefreshToken);
 
-export const User = mongoose.model<User>('User', schema, 'users');
+export const User = mongoose.model<UserAttributes, UserModel>(
+  'User',
+  schema,
+  'users',
+);

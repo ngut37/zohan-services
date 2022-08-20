@@ -18,7 +18,9 @@
     "paths": {
       "@config/*": ["./config/*"],
       "@models/*": ["./models/*"],
+      "@models": ["./models"],
       "@utils/*": ["./utils/*"],
+      "@scripts/*": ["./scripts/*"],
       "@middlewares/*": ["./controllers/middlewares/*"]
     }
   },
