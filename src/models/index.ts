@@ -1,14 +1,12 @@
-import { Provider } from 'nconf';
 import { Mongoose } from 'mongoose';
 
-import 'mongoose-geojson-schema';
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 export const mongoose = new Mongoose();
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('autoIndex', true);
-mongoose.set('useUnifiedTopology', true);
+export const initMongoose = (callback: () => void) => {
+  mongoose.connect(config.get(CONFIG_KEYS.MONGO_URL));
 
-export let config: Provider;
+  callback();
+};

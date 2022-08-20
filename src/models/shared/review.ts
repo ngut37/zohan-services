@@ -1,4 +1,4 @@
-import { CompanyUser } from '@models/company-user';
+import { Staff } from '@models/company-user';
 import { User } from '@models/user';
 
 import { mongoose } from '..';
@@ -7,7 +7,7 @@ const { Schema } = mongoose;
 
 export type ReviewBase = {
   user: User;
-  reply: CompanyUser;
+  reply: Staff;
 };
 
 export const modificationSchema = {

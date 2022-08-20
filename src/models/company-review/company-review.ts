@@ -1,4 +1,4 @@
-// import { CompanyUser } from '@models/company-user';
+// import { Staff } from '@models/company-user';
 // import { Schema, Document } from 'mongoose';
 
 // import { mongoose } from '..';
@@ -8,7 +8,7 @@
 //   name: string;
 //   residence: string;
 //   dic?: string;
-//   users: CompanyUser[];
+//   users: Staff[];
 // };
 
 // export type Company = CompanyAttributes & Document;
@@ -28,7 +28,7 @@
 //       required: true,
 //     },
 //     dic: String,
-//     users: { type: String, ref: 'CompanyUser', default: [] },
+//     users: { type: String, ref: 'Staff', default: [] },
 //   },
 //   { timestamps: true },
 // );

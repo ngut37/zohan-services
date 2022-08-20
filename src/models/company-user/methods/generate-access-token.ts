@@ -5,9 +5,9 @@ import { CONFIG_KEYS } from '@config/keys';
 
 import { CompanyAccessTokenPayload } from '@utils/company-auth';
 
-import { CompanyUser } from '../company-user';
+import { Staff } from '../company-user';
 
-export function generateAccessToken(this: CompanyUser) {
+export function generateAccessToken(this: Staff) {
   const payload: CompanyAccessTokenPayload = {
     userId: this.id,
     name: this.name,

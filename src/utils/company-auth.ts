@@ -2,14 +2,16 @@ import { verify, VerifyOptions } from 'jsonwebtoken';
 
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
-import { CompanyUserAttributes, Role } from '@models/company-user';
+
+import { StaffAttributes } from '@models/company-user';
+import { Role } from '@models/shared/roles';
 
 export type CompanyRefreshTokenPayload = {
   userId: string;
 };
 
 export type CompanyAccessTokenPayload = CompanyRefreshTokenPayload &
-  Pick<CompanyUserAttributes, 'name' | 'email' | 'roles' | 'company'>;
+  Pick<StaffAttributes, 'name' | 'email' | 'roles' | 'company'>;
 
 export type CompanyAuthUtils = {
   hasRole: (this: ExtendedCompanyAccessTokenPayload, role: Role) => boolean;

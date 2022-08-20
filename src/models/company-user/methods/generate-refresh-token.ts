@@ -3,10 +3,10 @@ import { sign } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { CompanyUser } from '../company-user';
+import { Staff } from '../company-user';
 import { CompanyRefreshTokenPayload } from '@utils/company-auth';
 
-export function generateRefreshToken(this: CompanyUser) {
+export function generateRefreshToken(this: Staff) {
   const payload: CompanyRefreshTokenPayload = { userId: this.id };
 
   const generatedToken = sign(

@@ -1,9 +1,9 @@
 import { genSalt, hash } from 'bcrypt';
 
-import { CompanyUser } from '../company-user';
+import { Staff } from '../company-user';
 
 export async function assignHashSaltPair(
-  this: CompanyUser,
+  this: Staff,
   plainPassword: string,
 ): Promise<void> {
   try {

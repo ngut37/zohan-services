@@ -1,24 +1,27 @@
-import { Schema, Document } from 'mongoose';
+import { Schema, Model, HydratedDocument } from 'mongoose';
 
 import { Company } from '../company';
 
 import { mongoose } from '..';
+import { Timestamps } from '@models/shared/timestamp';
 
 export type VenueAttributes = {
   name: string;
   company: Company;
   address: string;
-};
+} & Timestamps;
 
-export type Venue = VenueAttributes & Document;
+type VenueModel = Model<VenueAttributes>;
 
-const schema = new Schema(
+export type Venue = HydratedDocument<VenueAttributes>;
+
+const schema = new Schema<VenueAttributes, VenueModel>(
   {
     name: {
       type: String,
       required: true,
     },
-    residence: {
+    address: {
       type: String,
       required: true,
     },
@@ -30,4 +33,8 @@ const schema = new Schema(
 // indexes
 schema.index({ ico: 1 });
 
-export const Venue = mongoose.model<Venue>('Venue', schema, 'venues');
+export const Venue = mongoose.model<VenueAttributes, VenueModel>(
+  'Venue',
+  schema,
+  'venues',
+);
