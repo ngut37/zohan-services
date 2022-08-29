@@ -1,6 +1,6 @@
 import { SignOptions } from 'jsonwebtoken';
 
-export type Config = Partial<{
+type FullConfig = {
   PORT: number;
   MONGO_URL: string;
   APP_ENV: EnvironmentName;
@@ -12,9 +12,11 @@ export type Config = Partial<{
   /** expressed in seconds or a string describing a time span [zeit/ms](https://github.com/zeit/ms.js).  Eg: 60, "2 days", "10h", "7d" */
   ACCESS_TOKEN_EXPIRATION_DURATION: SignOptions['expiresIn'];
   REFRESH_EXPIRATION_DURATION: SignOptions['expiresIn'];
-}>;
+};
 
-export type ConfigKeys = keyof Config;
+export type Config = Partial<FullConfig>;
+
+export type ConfigKeys = keyof FullConfig;
 
 export type EnvironmentName = 'development' | 'test' | 'production';
 

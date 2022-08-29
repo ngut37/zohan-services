@@ -6,7 +6,5 @@ import { CONFIG_KEYS } from '@config/keys';
 export const mongoose = new Mongoose();
 
 export const initMongoose = (callback: () => void) => {
-  mongoose.connect(config.get(CONFIG_KEYS.MONGO_URL));
-
-  callback();
+  mongoose.connect(config.get(CONFIG_KEYS.MONGO_URL)).then(() => callback());
 };
