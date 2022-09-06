@@ -1,4 +1,4 @@
-import { Staff } from '@models/company-user';
+import { Staff } from '@models/staff';
 import { User } from '@models/user';
 
 import { mongoose } from '..';

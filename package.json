@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
-    "dev": "ts-node -r tsconfig-paths/register src/app.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/app.ts --watch",
     "gcp-build": "tsc --p tsconfig.json",
     "build": "tsc --p tsconfig.json",
     "start:seed-ruian-data": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/scripts/seed-cadastral-data/index.js",

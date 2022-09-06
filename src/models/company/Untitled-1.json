@@ -1,0 +1,60 @@
+{
+  "?xml": "",
+  "are:Ares_odpovedi": {
+    "are:Odpoved": {
+      "are:Pocet_zaznamu": 1,
+      "are:Typ_vyhledani": "FREE",
+      "are:Zaznam": {
+        "are:Shoda_ICO": {
+          "dtt:Kod": 9
+        },
+        "are:Vyhledano_dle": "ICO",
+        "are:Typ_registru": {
+          "dtt:Kod": 2,
+          "dtt:Text": "OR"
+        },
+        "are:Datum_vzniku": "1992-11-23",
+        "are:Datum_platnosti": "2022-03-16",
+        "are:Pravni_forma": {
+          "dtt:Kod_PF": 112
+        },
+        "are:Obchodni_firma": "REAS s.r.o.",
+        "are:ICO": 48034452,
+        "are:Identifikace": {
+          "are:Adresa_ARES": {
+            "dtt:ID_adresy": 211295193,
+            "dtt:Kod_statu": 203,
+            "dtt:Nazev_okresu": "Hlavní město Praha",
+            "dtt:Nazev_obce": "Praha",
+            "dtt:Nazev_casti_obce": "Smíchov",
+            "dtt:Nazev_mestske_casti": "Praha 5",
+            "dtt:Nazev_ulice": "Třístoličná",
+            "dtt:Cislo_domovni": 1556,
+            "dtt:Typ_cislo_domovni": 1,
+            "dtt:Cislo_orientacni": 1,
+            "dtt:PSC": 15000,
+            "dtt:Adresa_UIR": {
+              "udt:Kod_oblasti": 19,
+              "udt:Kod_kraje": 19,
+              "udt:Kod_okresu": 3100,
+              "udt:Kod_obce": 554782,
+              "udt:Kod_pobvod": 51,
+              "udt:Kod_nobvod": 51,
+              "udt:Kod_casti_obce": 400301,
+              "udt:Kod_mestske_casti": 500143,
+              "udt:PSC": 15000,
+              "udt:Kod_ulice": 472531,
+              "udt:Cislo_domovni": 1556,
+              "udt:Typ_cislo_domovni": 1,
+              "udt:Cislo_orientacni": 1,
+              "udt:Kod_adresy": 22091301,
+              "udt:Kod_objektu": 21925186
+            }
+          }
+        },
+        "are:Kod_FU": 5,
+        "are:Priznaky_subjektu": "NAAANZNNNNNNNNNNNNNNNNNNANNNNN"
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { Staff } from '../company-user';
+import { Staff } from '../staff';
 import { CompanyRefreshTokenPayload } from '@utils/company-auth';
 
 export function generateRefreshToken(this: Staff) {

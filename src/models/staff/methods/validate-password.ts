@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt';
 
-import { Staff } from '../company-user';
+import { Staff } from '../staff';
 
 export async function validatePassword(
   this: Staff,
