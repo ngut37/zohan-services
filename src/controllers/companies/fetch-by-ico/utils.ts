@@ -20,7 +20,8 @@ export const mapCompanyToFormData = async (
     stringAddress,
     region: { name: regionString },
     district: { name: districtString },
-    momc: { name: quarterString },
+    momc,
+    complete,
   } = populatedCompany;
 
   return {
@@ -29,6 +30,7 @@ export const mapCompanyToFormData = async (
     stringAddress,
     regionString,
     districtString,
-    quarterString,
+    quarterString: momc?.name,
+    complete,
   };
 };

@@ -44,6 +44,7 @@ const requestBodySchema = {
   staffName: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
+  complete: Joi.boolean(),
 };
 
 router.route({
@@ -96,21 +97,18 @@ router.route({
         );
       }
 
-      let momc: Momc | null = null;
+      let momc: Momc | undefined;
       let mopId: Momc['mop'] | undefined = undefined;
       if (quarterString) {
-        momc = await Momc.findOne({
-          name: { $regex: new RegExp(quarterString, 'i') },
-        });
+        momc =
+          (await Momc.findOne({
+            name: { $regex: new RegExp(quarterString, 'i') },
+          })) ?? undefined;
 
-        if (!momc) {
-          return ctx.throw(
-            500, // 500 - internal server error because database should contain data
-            `MOMC with name ${quarterString} was not found.`,
-          );
+        // MOMC is found if MOMC is located in Prague
+        if (momc) {
+          mopId = momc.mop;
         }
-
-        mopId = momc.mop;
       }
 
       // create company
@@ -125,7 +123,7 @@ router.route({
         mop: mopId,
         momc,
 
-        incomplete: false,
+        complete: true,
       });
 
       // create admin staff

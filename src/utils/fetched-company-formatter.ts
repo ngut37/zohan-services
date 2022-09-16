@@ -72,25 +72,23 @@ export const formatFetchedCompany = (
 
     const name = record['are:Obchodni_firma'];
 
-    //! ADD date created and date valid from
-
     const { 'dtt:Nazev_ulice': street, 'dtt:Adresa_UIR': ruianIds } =
       record['are:Identifikace']['are:Adresa_ARES'];
 
     const {
       'udt:Kod_kraje': regionId,
       'udt:Kod_okresu': districtId,
-      'udt:Kod_obce': municipalityId,
-      'udt:Kod_casti_obce': municipalityPartId,
+      'udt:Kod_obce': _municipalityId,
+      'udt:Kod_casti_obce': _municipalityPartId,
       'udt:Kod_mestske_casti': momcId,
       'udt:Kod_pobvod': mopId,
-      'udt:PSC': zipCode,
-      'udt:Kod_ulice': streetId,
+      'udt:PSC': _zipCode,
+      'udt:Kod_ulice': _streetId,
       'udt:Cislo_domovni': houseNumber,
-      'udt:Typ_cislo_domovni': houseNumberType,
+      'udt:Typ_cislo_domovni': _houseNumberType,
       'udt:Cislo_orientacni': streetNumber,
-      'udt:Kod_adresy': addressId,
-      'udt:Kod_objektu': buildingId,
+      'udt:Kod_adresy': _addressId,
+      'udt:Kod_objektu': _buildingId,
     } = ruianIds;
 
     const stringAddress = `${street} ${houseNumber}${
@@ -107,21 +105,6 @@ export const formatFetchedCompany = (
       district: districtId,
       mop: mopId,
       momc: momcId,
-      ruianIds: {
-        regionId,
-        districtId,
-        municipalityId,
-        municipalityPartId,
-        momcId,
-        mopId,
-        zipCode,
-        streetId,
-        houseNumber,
-        houseNumberType,
-        streetNumber,
-        addressId,
-        buildingId,
-      },
     };
   } else {
     return undefined;

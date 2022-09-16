@@ -13,4 +13,6 @@ export const CONFIG_KEYS = enumerate<ConfigKeys>([
 
   'REFRESH_TOKEN_SECRET',
   'REFRESH_EXPIRATION_DURATION',
+
+  'SMAP_API_URL',
 ]);
