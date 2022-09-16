@@ -6,8 +6,6 @@ import { DistrictAttributes } from '@models/district';
 import { MopAttributes } from '@models/mop';
 import { MomcAttributes } from '@models/momc';
 
-import { RuianIds } from './types';
-
 import { mongoose } from '..';
 
 export type RawCompany = {
@@ -20,12 +18,11 @@ export type RawCompany = {
   district: DistrictAttributes['_id'];
   mop?: MopAttributes['_id'];
   momc?: MomcAttributes['_id'];
-  ruianIds?: RuianIds;
 };
 
 export type CompanyAttributes = RawCompany & {
   _id: ObjectId;
-  incomplete: boolean;
+  complete: boolean;
 } & Timestamps;
 
 type CompanyModel = Model<CompanyAttributes>;
@@ -53,21 +50,9 @@ const schema = new Schema<CompanyAttributes, CompanyModel>(
     mop: { type: Number, ref: 'Mop' },
     momc: { type: Number, ref: 'Momc' },
 
-    ruianIds: {
-      municipalityId: Number,
-      municipalityPartId: Number,
-      streetId: Number,
-      zipCode: Number,
-      addressId: Number,
-      buildingId: Number,
-      houseNumber: Number,
-      houseNumberType: Number,
-      streetNumber: Number,
-    },
-
-    incomplete: {
+    complete: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true },

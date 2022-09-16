@@ -56,7 +56,7 @@ const schema = new Schema<StaffAttributes, StaffModel, StaffMethods>(
       required: true,
       unique: true,
     },
-    password: { type: passwordSchema, required: true },
+    password: { type: passwordSchema, required: true, _id: false },
     company: {
       type: String,
       ref: 'Company',

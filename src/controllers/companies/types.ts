@@ -8,4 +8,6 @@ export type CompanyFormData = {
   districtString: string;
   /** momc */
   quarterString?: string;
+
+  complete?: boolean;
 };
