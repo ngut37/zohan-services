@@ -5,6 +5,10 @@ import { Region } from '@models/region';
 import { District } from '@models/district';
 import { Momc } from '@models/momc';
 import { Company } from '@models/company';
+import { Staff } from '@models/staff';
+import { ROLES } from '@models/shared/roles';
+
+import { CompanyFormData } from './types';
 
 /* Example request body
 
@@ -21,16 +25,10 @@ import { Company } from '@models/company';
 
 const router = joiRouter();
 
-type RequestBody = {
-  ico: string;
-  name: string;
-  // address: AddressInfo;
-  stringAddress: string;
-
-  regionString: string;
-  districtString: string;
-  /** momc */
-  quarterString?: string;
+type RequestBody = CompanyFormData & {
+  staffName: string;
+  email: string;
+  password: string;
 };
 
 const requestBodySchema = {
@@ -42,18 +40,21 @@ const requestBodySchema = {
   regionString: Joi.string().required(),
   districtString: Joi.string().required(),
   quarterString: Joi.string(), // momc
+
+  staffName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
 };
 
 router.route({
-  path: '/register',
-  method: 'post',
+  path: '/create',
+  method: 'put',
   validate: {
     body: requestBodySchema,
     type: 'json',
   },
   handler: [
     async (ctx: ParameterizedContext) => {
-      const body = ctx.request.body as RequestBody;
       const {
         ico,
         name,
@@ -61,24 +62,16 @@ router.route({
         regionString,
         districtString,
         quarterString,
-      } = body;
+        staffName,
+        email,
+        password,
+      } = ctx.request.body as RequestBody;
 
       // if company with ICO already exists,
       const [foundCompanyByIco] = await Company.find({ ico });
       if (foundCompanyByIco) {
-        if (foundCompanyByIco.incomplete) {
-          // return found company to finish registration
-          return ctx.throw(
-            400,
-            'A company with this IČO was created but not completed.',
-          );
-        } else {
-          // throw CONFLICT error
-          return ctx.throw(
-            409,
-            'A company with this IČO is already registered.',
-          );
-        }
+        // throw CONFLICT error
+        return ctx.throw(409, 'A company with this ICO already exists.');
       }
 
       const region = await Region.findOne({
@@ -88,7 +81,7 @@ router.route({
       if (!region) {
         return ctx.throw(
           500, // 500 - internal server error because database should contain data
-          `Region with name "${regionString} was not found."`,
+          `Region with name "${regionString} was not found.`,
         );
       }
 
@@ -99,7 +92,7 @@ router.route({
       if (!district) {
         return ctx.throw(
           500, // 500 - internal server error because database should contain data
-          `District with name "${districtString} was not found."`,
+          `District with name "${districtString} was not found.`,
         );
       }
 
@@ -113,7 +106,7 @@ router.route({
         if (!momc) {
           return ctx.throw(
             500, // 500 - internal server error because database should contain data
-            `M with name "${districtString} was not found."`,
+            `MOMC with name ${quarterString} was not found.`,
           );
         }
 
@@ -131,8 +124,35 @@ router.route({
         district,
         mop: mopId,
         momc,
+
+        incomplete: false,
       });
-      await createdCompany.save();
+
+      // create admin staff
+      const createdStaff = new Staff({
+        name: staffName,
+        email,
+        role: ROLES.admin,
+        company: createdCompany,
+      });
+
+      try {
+        // assign salt and hashed password to staff
+        await createdStaff.assignHashSaltPair(password);
+
+        // persist company and staff
+        await createdCompany.save();
+        await createdStaff.save();
+      } catch (error) {
+        console.error(
+          `Company creation failed for request body: ${JSON.stringify(
+            ctx.request.body,
+          )}`,
+        );
+        console.error(JSON.stringify(error));
+        await createdCompany.delete();
+        await createdStaff.delete();
+      }
 
       ctx.status = 201;
 

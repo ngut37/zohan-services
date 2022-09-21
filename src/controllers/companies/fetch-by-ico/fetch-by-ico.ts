@@ -9,6 +9,7 @@ import {
   formatFetchedCompany,
   ParsedRawCompany,
 } from '@utils/fetched-company-formatter';
+import { mapCompanyToFormData } from './utils';
 
 /* Example request body
   {
@@ -36,13 +37,17 @@ router.route({
   handler: async (ctx: ParameterizedContext) => {
     const { ico } = ctx.request.body as RequestBody;
 
-    // check if company exists
+    // return company form data if it already exists
     const [foundCompany] = await Company.find({ ico });
 
     if (foundCompany) {
-      return (ctx.body = { success: true, data: foundCompany.toObject() });
+      return (ctx.body = {
+        success: true,
+        data: await mapCompanyToFormData(foundCompany),
+      });
     }
 
+    // fetch company, parse XML data and return it as company form data
     const fetchResult = await axios.get(
       `https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?ico=${ico}`,
     );
@@ -57,9 +62,12 @@ router.route({
       return ctx.throw(404, 'Company with given ICO not found.');
     }
 
-    const createdCompany = new Company(formattedResult);
+    const fetchedCompany = new Company({ ...formattedResult, ico });
 
-    ctx.body = { success: true, data: createdCompany.toObject() };
+    ctx.body = {
+      success: true,
+      data: await mapCompanyToFormData(fetchedCompany),
+    };
   },
 });
 

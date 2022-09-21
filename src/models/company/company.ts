@@ -3,8 +3,8 @@ import { Schema, Model, HydratedDocument, ObjectId } from 'mongoose';
 import { Timestamps } from '@models/shared/timestamp';
 import { RegionAttributes } from '@models/region';
 import { DistrictAttributes } from '@models/district';
-import { Mop } from '@models/mop';
-import { Momc } from '@models/momc';
+import { MopAttributes } from '@models/mop';
+import { MomcAttributes } from '@models/momc';
 
 import { RuianIds } from './types';
 
@@ -18,8 +18,8 @@ export type RawCompany = {
 
   region: RegionAttributes['_id'];
   district: DistrictAttributes['_id'];
-  mop?: Mop['_id'];
-  momc?: Momc['_id'];
+  mop?: MopAttributes['_id'];
+  momc?: MomcAttributes['_id'];
   ruianIds?: RuianIds;
 };
 
