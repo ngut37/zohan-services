@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "engines" : { 
-    "node" : ">=14.0.0 <17.0.0"
+    "node" : ">=12"
   },
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
