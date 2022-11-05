@@ -1,7 +1,6 @@
 import axios from 'axios';
 import joiRouter, { Joi } from 'koa-joi-router';
 
-import { ParameterizedContext } from 'koa';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 import { RawSuggestion } from './types';
@@ -27,7 +26,7 @@ router.route({
   validate: {
     query: requestQuerySchema,
   },
-  handler: async (ctx: ParameterizedContext) => {
+  handler: async (ctx) => {
     const { phrase, count = SUGGESTIONS_COUNT } = ctx.request
       .query as unknown as RequestQuery;
 

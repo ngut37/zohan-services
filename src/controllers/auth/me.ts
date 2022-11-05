@@ -1,5 +1,5 @@
 import joiRouter from 'koa-joi-router';
-import { ParameterizedContext } from 'koa';
+
 import { ObjectId } from 'mongodb';
 
 import { validateAccessToken, validateRefreshToken } from '@utils/auth';
@@ -12,7 +12,7 @@ router.route({
   path: '/me',
   method: 'get',
   handler: [
-    async (ctx: ParameterizedContext) => {
+    async (ctx) => {
       const accessToken = ctx.cookies.get('access_token');
       const refreshToken = ctx.cookies.get('refresh_token');
       if (!accessToken || !refreshToken) {

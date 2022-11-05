@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 const router = joiRouter();
@@ -28,7 +27,7 @@ router.route({
   },
   handler: [
     // * Middleware handles go here, the order matters
-    (ctx: ParameterizedContext) => {
+    (ctx) => {
       // body
       const body = ctx.request.body as RequestBody;
       const { companyId, timeBlock } = body;

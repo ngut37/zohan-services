@@ -9,7 +9,7 @@ import { Staff } from '../staff';
 
 export function generateAccessToken(this: Staff) {
   const payload: CompanyAccessTokenPayload = {
-    userId: this.id,
+    staffId: this.id,
     name: this.name,
     email: this.email,
     role: this.role,

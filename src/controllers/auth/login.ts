@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { User } from '@models/user';
@@ -23,7 +22,7 @@ type RequestBody = {
 };
 
 const requestBodySchema = {
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().required(),
 };
 
@@ -35,8 +34,7 @@ router.route({
     type: 'json',
   },
   handler: [
-    async (ctx: ParameterizedContext) => {
-      // body
+    async (ctx) => {
       const body = ctx.request.body as RequestBody;
       const { email, password } = body;
 

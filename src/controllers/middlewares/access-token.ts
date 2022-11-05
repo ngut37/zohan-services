@@ -1,4 +1,4 @@
-import { Middleware, ParameterizedContext } from 'koa';
+import { ParameterizedContext, Middleware } from 'koa';
 
 import { AccessTokenPayload, validateAccessToken } from '@utils/auth';
 
@@ -10,7 +10,7 @@ export const protectRouteMiddleware = (
   protectOptions: ProtectRouteMiddlewareOptions,
 ): [Middleware, Middleware<{ auth?: AccessTokenPayload }>] => {
   return [
-    (ctx: ParameterizedContext, next) => {
+    (ctx, next) => {
       const accessToken = ctx.cookies.get('access_token');
 
       if (!accessToken) {

@@ -7,7 +7,7 @@ import { StaffAttributes } from '@models/staff';
 import { Role } from '@models/shared/roles';
 
 export type CompanyRefreshTokenPayload = {
-  userId: string;
+  staffId: string;
 };
 
 export type CompanyAccessTokenPayload = CompanyRefreshTokenPayload &

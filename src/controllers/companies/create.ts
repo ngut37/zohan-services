@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { Region } from '@models/region';
@@ -55,7 +54,7 @@ router.route({
     type: 'json',
   },
   handler: [
-    async (ctx: ParameterizedContext) => {
+    async (ctx) => {
       const {
         ico,
         name,

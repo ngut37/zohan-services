@@ -7,7 +7,7 @@ import { Staff } from '../staff';
 import { CompanyRefreshTokenPayload } from '@utils/company-auth';
 
 export function generateRefreshToken(this: Staff) {
-  const payload: CompanyRefreshTokenPayload = { userId: this.id };
+  const payload: CompanyRefreshTokenPayload = { staffId: this.id };
 
   const generatedToken = sign(
     payload,
