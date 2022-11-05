@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { User } from '@models/user';
@@ -33,7 +32,7 @@ router.route({
   },
   handler: [
     protectRouteMiddleware({ allowUnauthorized: false }),
-    async (ctx: ParameterizedContext) => {
+    async (ctx) => {
       const { password, phoneNumber, ...modifications } = ctx.request
         .body as RequestBody;
       const { id: userId } = ctx.state.auth as AccessTokenPayload;
@@ -41,7 +40,7 @@ router.route({
       const user = await User.findById(userId, { password: 0 });
 
       if (!user) {
-        ctx.throw(404, `User not found with ID ${userId}`);
+        return ctx.throw(404, `User not found with ID ${userId}`);
       }
 
       if (phoneNumber) {

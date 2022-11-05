@@ -23,7 +23,7 @@ const defaultConfig = Object.freeze<Config>({
 
   // Token expiration
   ACCESS_TOKEN_EXPIRATION_DURATION:
-    process.env.ACCESS_TOKEN_EXPIRATION_DURATION || '1h',
+    process.env.ACCESS_TOKEN_EXPIRATION_DURATION || '5m',
   REFRESH_EXPIRATION_DURATION:
     process.env.REFRESH_EXPIRATION_DURATION || '180d',
 

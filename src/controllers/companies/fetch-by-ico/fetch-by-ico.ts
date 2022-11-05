@@ -1,6 +1,6 @@
 import axios from 'axios';
 import joiRouter, { Joi } from 'koa-joi-router';
-import { ParameterizedContext } from 'koa';
+
 import { XMLParser } from 'fast-xml-parser';
 
 import { Company } from '@models/company';
@@ -34,7 +34,7 @@ router.route({
     body: requestQuerySchema,
     type: 'json',
   },
-  handler: async (ctx: ParameterizedContext) => {
+  handler: async (ctx) => {
     const { ico } = ctx.request.body as RequestBody;
 
     // return company form data if it already exists

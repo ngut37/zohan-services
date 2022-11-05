@@ -1,26 +1,32 @@
-// ! WIP, not safe for production
-
 import joiRouter, { Joi } from 'koa-joi-router';
-
-import { User } from '@models/user';
 
 import { generateEmailRegex } from '@utils/email';
 
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
+import { Staff } from '@models/staff';
+
+/* Example request body
+  {
+    "email": "johndoe@email.com",
+    "password": "123456"
+  }
+*/
 
 const router = joiRouter();
 
 type RequestBody = {
   email: string;
+  password: string;
 };
 
 const requestBodySchema = {
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
 };
 
 router.route({
-  path: '/o-auth-login',
+  path: '/login',
   method: 'post',
   validate: {
     body: requestBodySchema,
@@ -28,38 +34,39 @@ router.route({
   },
   handler: [
     async (ctx) => {
-      const { email } = ctx.request.body as RequestBody;
+      const body = ctx.request.body as RequestBody;
+      const { email, password } = body;
 
       const emailRegex = generateEmailRegex(email);
 
-      const userFoundByEmail = await User.findOne({
+      const staffFoundByEmail = await Staff.findOne({
         email: { $regex: emailRegex },
       });
 
-      if (!userFoundByEmail) return ctx.throw(401, 'Incorrect credentials.');
+      if (!staffFoundByEmail) return ctx.throw(401, 'Incorrect credentials.');
+
+      const isValidPassword = await staffFoundByEmail.validatePassword(
+        password,
+      );
+
+      if (!isValidPassword) return ctx.throw(401, 'Incorrect credentials.');
 
       // generate JWT access-refresh pair
-      const accessToken = userFoundByEmail.generateAccessToken();
-      const refreshToken = userFoundByEmail.generateRefreshToken();
-
-      const productionEnvironment =
-        config.get(CONFIG_KEYS.APP_ENV) === 'production';
+      const accessToken = staffFoundByEmail.generateAccessToken();
+      const refreshToken = staffFoundByEmail.generateRefreshToken();
 
       // ! this is a hack to make deployed front-end working
+      const productionEnvironment =
+        config.get(CONFIG_KEYS.APP_ENV) === 'production';
       ctx.cookies.secure = productionEnvironment;
 
-      ctx.cookies.set('access_token', accessToken, {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: productionEnvironment,
-      });
       ctx.cookies.set('refresh_token', refreshToken, {
         httpOnly: true,
         sameSite: 'none',
         secure: productionEnvironment,
       });
 
-      ctx.body = { success: true };
+      ctx.body = { success: true, data: { accessToken } };
     },
   ],
 });

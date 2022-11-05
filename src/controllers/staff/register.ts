@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { generateEmailRegex } from '@utils/email';
@@ -56,7 +55,7 @@ router.route({
     type: 'json',
   },
   handler: [
-    async (ctx: ParameterizedContext) => {
+    async (ctx) => {
       const body = ctx.request.body as RequestBody;
       const { name, email, password, companyId, venueId, role } = body;
 

@@ -30,12 +30,16 @@ export const validateAccessToken = (
 
 export const validateRefreshToken = (token: string) => {
   try {
-    const payload = verify(
-      token,
-      config.get(CONFIG_KEYS.REFRESH_TOKEN_SECRET),
-    ) as AccessTokenPayload;
-    return payload;
+    return validateRefreshTokenOrFail(token);
   } catch {
     return undefined;
   }
+};
+
+export const validateRefreshTokenOrFail = (token: string) => {
+  const payload = verify(
+    token,
+    config.get(CONFIG_KEYS.REFRESH_TOKEN_SECRET),
+  ) as AccessTokenPayload;
+  return payload;
 };

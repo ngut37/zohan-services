@@ -22,7 +22,7 @@
 //       passthrough: true,
 //       key: 'auth',
 //     }),
-//     (ctx: ParameterizedContext<{ auth?: AccessTokenPayload }>, next) => {
+//     (ctx<{ auth?: AccessTokenPayload }>, next) => {
 //       const { allowUnauthorized, allowedRoles } = protectOptions;
 
 //       // no auth provided

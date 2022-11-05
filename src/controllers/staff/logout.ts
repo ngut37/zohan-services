@@ -7,7 +7,6 @@ router.route({
   method: 'post',
   handler: [
     async (ctx) => {
-      ctx.cookies.set('access_token', '', { httpOnly: true });
       ctx.cookies.set('refresh_token', '', { httpOnly: true });
 
       ctx.body = {

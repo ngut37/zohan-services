@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter from 'koa-joi-router';
 
 import { User } from '@models/user';
@@ -14,7 +13,7 @@ router.route({
   method: 'get',
   handler: [
     protectRouteMiddleware({ allowUnauthorized: false }),
-    async (ctx: ParameterizedContext) => {
+    async (ctx) => {
       const authUser = ctx.state.auth as AccessTokenPayload;
       const user = await User.findById(authUser.id, { password: 0 });
 

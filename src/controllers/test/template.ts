@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 /*
@@ -54,7 +53,7 @@ router.route({
       Middleware handlers go here (the order matters)
       e.g. authentication / authorization middleware
     */
-    (ctx: ParameterizedContext) => {
+    (ctx) => {
       // params
       const params = ctx.request.params as RequestParams;
       const { id } = params;
