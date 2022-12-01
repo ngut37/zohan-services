@@ -1,19 +1,26 @@
 import { sign } from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
+
+import { Company } from '@models/company';
 
 import { CompanyAccessTokenPayload } from '@utils/company-auth';
 
 import { Staff } from '../staff';
 
-export function generateAccessToken(this: Staff) {
+export function generateAccessToken(
+  this: Staff & { company: Company | ObjectId },
+) {
   const payload: CompanyAccessTokenPayload = {
     staffId: this.id,
     name: this.name,
     email: this.email,
     role: this.role,
-    company: this.company,
+    company: (this.company as Company).name
+      ? this.company.id
+      : this.company.toString(),
   };
 
   const generatedToken = sign(

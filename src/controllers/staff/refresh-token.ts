@@ -1,9 +1,10 @@
 import joiRouter from 'koa-joi-router';
 
-import { ObjectId } from 'mongodb';
-
-import { Staff } from '@models/staff';
-import { validateCompanyRefreshToken } from '@utils/company-auth';
+import {
+  CompleteCompanyAccessTokenPayload,
+  validateCompanyRefreshToken,
+} from '@utils/company-auth';
+import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
 const router = joiRouter();
 
@@ -11,6 +12,9 @@ router.route({
   path: '/refresh-token',
   method: 'get',
   handler: [
+    adminProtectRouteMiddleware({
+      allowUnauthorized: true,
+    }),
     async (ctx) => {
       const refreshToken = ctx.cookies.get('refresh_token');
       if (!refreshToken) {
@@ -23,14 +27,11 @@ router.route({
         return ctx.throw(401);
       }
 
-      // compare access and refresh token userId
+      // parse staff document from middleware result
+      const { staff } = ctx.state.auth as CompleteCompanyAccessTokenPayload;
       const { staffId: refreshStaffId } = refreshTokenPayload;
 
-      // check if user exists
-      const staff = await Staff.findOne({
-        _id: new ObjectId(refreshStaffId),
-      });
-      if (!staff) {
+      if (!staff || staff.id !== refreshStaffId) {
         return ctx.throw(401);
       }
 

@@ -3,15 +3,16 @@ import { verify, VerifyOptions } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { StaffAttributes } from '@models/staff';
+import { Staff, StaffAttributes } from '@models/staff';
 import { Role } from '@models/shared/roles';
 
 export type CompanyRefreshTokenPayload = {
   staffId: string;
+  company: string;
 };
 
 export type CompanyAccessTokenPayload = CompanyRefreshTokenPayload &
-  Pick<StaffAttributes, 'name' | 'email' | 'role' | 'company'>;
+  Pick<StaffAttributes, 'name' | 'email' | 'role'>;
 
 export type CompanyAuthUtils = {
   hasRole: (this: ExtendedCompanyAccessTokenPayload, role: Role) => boolean;
@@ -23,6 +24,9 @@ export type CompanyAuthUtils = {
 
 export type ExtendedCompanyAccessTokenPayload = CompanyAccessTokenPayload &
   CompanyAuthUtils;
+
+export type CompleteCompanyAccessTokenPayload =
+  ExtendedCompanyAccessTokenPayload & { staff: Staff };
 
 export const validateCompanyAccessToken = (
   token: string,

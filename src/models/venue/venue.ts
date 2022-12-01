@@ -1,15 +1,18 @@
 import { Schema, Model, HydratedDocument } from 'mongoose';
 
-import { Company } from '../company';
-
-import { mongoose } from '..';
 import { Timestamps } from '@models/shared/timestamp';
+import { addressSchema, AddressType } from '@models/shared/location';
+import { Point, pointSchema } from '@models/shared/point';
+
+import { Company } from '../company';
+import { mongoose } from '..';
 
 export type VenueAttributes = {
   name: string;
-  company: Company;
-  address: string;
-} & Timestamps;
+  company: Company['_id'];
+  location: Point;
+} & AddressType &
+  Timestamps;
 
 type VenueModel = Model<VenueAttributes>;
 
@@ -17,21 +20,18 @@ export type Venue = HydratedDocument<VenueAttributes>;
 
 const schema = new Schema<VenueAttributes, VenueModel>(
   {
-    name: {
-      type: String,
+    company: {
+      type: Schema.Types.ObjectId,
+      ref: 'Company',
       required: true,
     },
-    address: {
-      type: String,
-      required: true,
-    },
-    company: { type: String, ref: 'Company', required: true },
+    ...addressSchema, // string address will serve as Venue Name
+    location: pointSchema,
   },
   { timestamps: true },
 );
 
-// indexes
-schema.index({ ico: 1 });
+// TODO: create index for look-up
 
 export const Venue = mongoose.model<VenueAttributes, VenueModel>(
   'Venue',

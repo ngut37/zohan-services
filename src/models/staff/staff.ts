@@ -1,7 +1,10 @@
-import { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
+import { Schema, Model, HydratedDocument } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 import { Password, passwordSchema } from '@models/shared';
 import { Company } from '@models/company';
+import { Timestamps } from '@models/shared/timestamp';
+import { Venue } from '@models/venue';
 
 import { Role, roleSchema } from '../shared/roles';
 import { mongoose } from '..';
@@ -12,8 +15,6 @@ import { generateAccessToken } from './methods/generate-access-token';
 import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
-import { Timestamps } from '@models/shared/timestamp';
-import { Venue } from '@models/venue';
 
 export type StaffMethods = {
   /**
@@ -58,7 +59,7 @@ const schema = new Schema<StaffAttributes, StaffModel, StaffMethods>(
     },
     password: { type: passwordSchema, required: true, _id: false },
     company: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Company',
       required: true,
     },

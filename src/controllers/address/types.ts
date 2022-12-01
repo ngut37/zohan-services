@@ -1,3 +1,5 @@
+import { Coordinates } from '@models/types';
+
 export type RawSuggestion = {
   category: string;
   highlight: any[];
@@ -54,4 +56,5 @@ export type SuggestionFormData = {
   districtString: string;
   /** momc */
   quarterString?: string;
+  coordinates: Coordinates;
 };
