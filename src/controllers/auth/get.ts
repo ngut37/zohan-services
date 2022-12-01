@@ -4,7 +4,7 @@ import { User } from '@models/user';
 
 import { AccessTokenPayload } from '@utils/auth';
 
-import { protectRouteMiddleware } from '@middlewares/access-token';
+import { protectRouteMiddleware } from '@middlewares/protect';
 
 const router = joiRouter();
 

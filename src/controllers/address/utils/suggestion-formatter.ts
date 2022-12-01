@@ -6,7 +6,16 @@ export const formatSuggestion = (
   if (rawSuggestion.category !== 'address_cz') return;
 
   const {
-    userData: { street, streetNumber, houseNumber, region, district, quarter },
+    userData: {
+      street,
+      streetNumber,
+      houseNumber,
+      region,
+      district,
+      quarter,
+      longitude,
+      latitude,
+    },
   } = rawSuggestion;
 
   const stringAddress = `${street} ${houseNumber}${
@@ -18,5 +27,7 @@ export const formatSuggestion = (
     regionString: region,
     districtString: district,
     quarterString: quarter,
+
+    coordinates: [longitude, latitude],
   };
 };

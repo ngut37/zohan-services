@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "main": "app.js",
-  "engines" : { 
-    "node" : ">=12"
+  "engines": {
+    "node": ">=12"
   },
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
@@ -30,6 +30,7 @@
     "koa": "^2.13.4",
     "koa-bodyparser": "4.3.0",
     "koa-joi-router": "^8.0.0",
+    "koa-jwt": "^4.0.3",
     "koa-router": "10.0.0",
     "mongodb": "4.9.0",
     "mongoose": "6.5.2",

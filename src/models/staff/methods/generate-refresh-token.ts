@@ -7,7 +7,10 @@ import { Staff } from '../staff';
 import { CompanyRefreshTokenPayload } from '@utils/company-auth';
 
 export function generateRefreshToken(this: Staff) {
-  const payload: CompanyRefreshTokenPayload = { staffId: this.id };
+  const payload: CompanyRefreshTokenPayload = {
+    staffId: this.id,
+    company: this.company.toString(),
+  };
 
   const generatedToken = sign(
     payload,
