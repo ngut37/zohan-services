@@ -64,9 +64,9 @@ router.route({
       const body = ctx.request.body as RequestBody;
       const { name, email, password, phoneNumber, oAuth } = body;
 
-      // check for email duplicity. Make the periods
+      // check for email duplicity
       const emailRegex = generateEmailRegex(email);
-      const userFoundByEmail = await User.findOne({
+      const userFoundByEmail = await User.exists({
         email: { $regex: emailRegex },
       });
       if (userFoundByEmail)

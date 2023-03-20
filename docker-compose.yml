@@ -1,0 +1,8 @@
+services:
+  zohan-services:
+    platform: linux/amd64
+    build:
+      context: ./
+    ports:
+      - "4000:4000"
+    container_name: "zohan-services"

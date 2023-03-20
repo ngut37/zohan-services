@@ -17,7 +17,7 @@ router.route({
     }),
     async (ctx) => {
       const refreshToken = ctx.cookies.get('refresh_token');
-      if (!refreshToken) {
+      if (!refreshToken || !ctx.state.auth) {
         return ctx.throw(401);
       }
 

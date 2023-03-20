@@ -33,6 +33,6 @@ try {
   app.listen(port);
 
   console.log(`💈 Zohan services listening on port: ${port} 🎧`);
-} catch (e) {
-  console.error(e);
+} catch (error) {
+  console.error(error);
 }

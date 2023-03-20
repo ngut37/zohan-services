@@ -1,4 +1,5 @@
 import { Schema, Model, HydratedDocument } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 import { Timestamps } from '@models/shared/timestamp';
 import { addressSchema, AddressType } from '@models/shared/location';
@@ -8,6 +9,7 @@ import { Company } from '../company';
 import { mongoose } from '..';
 
 export type VenueAttributes = {
+  _id: ObjectId;
   name: string;
   company: Company['_id'];
   location: Point;
