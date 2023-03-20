@@ -11,8 +11,8 @@ export async function validatePassword(
   let generatedHash = '';
   try {
     generatedHash = await hash(plainPassword, salt);
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
   return generatedHash === hashedPassword;
 }

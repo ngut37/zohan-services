@@ -4,6 +4,7 @@ import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 import { Venue } from '@models/venue';
 
 import { mapLocationToIds } from '../utils/map-location-to-ids';
+import { CompanyAccessTokenPayload } from '@utils/company-auth';
 
 const router = joiRouter();
 
@@ -44,6 +45,7 @@ router.route({
     async (ctx) => {
       const { id } = ctx.request.params as RequestParams;
       const body = ctx.request.body as RequestBody;
+      const { company } = ctx.state.auth as CompanyAccessTokenPayload;
 
       const {
         stringAddress,
@@ -53,9 +55,9 @@ router.route({
         coordinates,
       } = body;
 
-      const foundVenue = await Venue.findById(id);
+      const [foundVenueToUpdate] = await Venue.find({ _id: id, company });
 
-      if (!foundVenue) {
+      if (!foundVenueToUpdate) {
         return ctx.throw(404, `Venue with ID "${id}" was not found.`);
       }
 
@@ -66,18 +68,18 @@ router.route({
         ctx,
       });
 
-      foundVenue.stringAddress = stringAddress;
-      foundVenue.region = region;
-      foundVenue.district = district;
-      foundVenue.mop = mop;
-      foundVenue.momc = momc;
-      foundVenue.location.coordinates = coordinates;
+      foundVenueToUpdate.stringAddress = stringAddress;
+      foundVenueToUpdate.region = region;
+      foundVenueToUpdate.district = district;
+      foundVenueToUpdate.mop = mop;
+      foundVenueToUpdate.momc = momc;
+      foundVenueToUpdate.location.coordinates = coordinates;
 
-      await foundVenue.save();
+      await foundVenueToUpdate.save();
 
       ctx.body = {
         success: true,
-        data: { foundVenue },
+        data: { foundVenue: foundVenueToUpdate },
       };
     },
   ],

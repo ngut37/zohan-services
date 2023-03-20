@@ -11,7 +11,7 @@ export async function assignHashSaltPair(
     const hashedPassword = await hash(plainPassword, salt);
 
     this.password = { hash: hashedPassword, salt };
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 }

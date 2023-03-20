@@ -1,17 +1,24 @@
 import joiRouter from 'koa-joi-router';
 
-import registerRouter from './register';
 import loginRouter from './login';
 import logoutRouter from './logout';
 import refreshTokenRouter from './refresh-token';
+import getAllRouter from './get-all';
+import editRouter from './edit';
+import createRouter from './create';
 
 const router = joiRouter();
 
 router.prefix('/staff');
 
-router.use(registerRouter.middleware());
+// auth endpoints
 router.use(loginRouter.middleware());
 router.use(logoutRouter.middleware());
 router.use(refreshTokenRouter.middleware());
+
+// CRUD endpoint
+router.use(getAllRouter.middleware());
+router.use(createRouter.middleware());
+router.use(editRouter.middleware());
 
 export default router;
