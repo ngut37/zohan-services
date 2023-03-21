@@ -38,8 +38,6 @@ type OptionsVariations = {
   municipalityId?: number;
 };
 
-//20220630_ST_UZSZ
-
 const OPTIONS: OptionsVariations = {
   scope: SCOPE.state,
   dataType: DATA_TYPE.complete,

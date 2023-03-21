@@ -1,4 +1,9 @@
-import mongoose, { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
+import { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
+
+import { Timestamps } from '@models/shared/timestamp';
+import { Password, passwordSchema } from '@models/shared';
+
+import { mongoose } from '..';
 
 import { assignHashSaltPair } from './methods/generate-hash-salt-pair';
 import { validatePassword } from './methods/validate-password';
@@ -8,8 +13,6 @@ import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
 
 import { OAuthType, O_AUTH_TYPES } from './types';
-import { Timestamps } from '@models/shared/timestamp';
-import { Password, passwordSchema } from '@models/shared';
 
 export type UserMethods = {
   /**

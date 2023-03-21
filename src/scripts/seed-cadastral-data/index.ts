@@ -1,10 +1,6 @@
 require('dotenv').config();
 import fs from 'fs';
 import { XMLParser } from 'fast-xml-parser';
-import { MongoClient } from 'mongodb';
-
-import { CONFIG_KEYS } from '@config/keys';
-import { config } from '@config/config';
 
 import { createDirectoryInCwd, downloadFile, unzip } from './utils/file';
 import {
@@ -23,14 +19,13 @@ import { Momc } from '@models/momc';
 (async () => {
   try {
     // mongoose connect
-    initMongoose(() => console.log('Connected to Mongo database.'));
-    const client = new MongoClient(config.get(CONFIG_KEYS.MONGO_URL));
-    await client.connect();
+    await initMongoose();
+    console.log('Connected to Mongo database.');
 
     const artifactsDirectory = '/artifacts';
     const artifactsDirectoryPath = createDirectoryInCwd(artifactsDirectory);
     // keep 2022-06-30 because in July 2022 Prague district becomes hidden
-    const fileDateString = '2022-06-30';
+    const fileDateString = '2023-04-30';
     const fileDate = new Date(fileDateString);
 
     const targetFilePath = artifactsDirectoryPath + `/${fileDateString}.zip`;
@@ -40,7 +35,10 @@ import { Momc } from '@models/momc';
       console.log('File exists, skip downloading...');
     } catch (error) {
       // file does not exist
-      console.log('File file does not exist, downloading CUZK file...');
+      console.log(
+        `${targetFilePath} file does not exist, downloading CUZK file...`,
+      );
+      console.log(cuzkUrlBuilder(fileDate));
       await downloadFile(cuzkUrlBuilder(fileDate), targetFilePath);
     }
 

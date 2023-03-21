@@ -20,7 +20,7 @@ do
     # Check if it was successfully loaded
     if [ -z "$value" ]; then
       # It wasn't, send message to stdout & skip replacing it
-      echo "Cloud not resolve secret $secret, skipping";
+      echo "Could not resolve secret $secret, skipping";
       continue;
     fi
     # Replace secret with it's value in file

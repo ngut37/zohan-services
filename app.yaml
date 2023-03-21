@@ -1,4 +1,4 @@
-runtime: nodejs12
+runtime: nodejs16
 
 env_variables:
   APP_ENV: production
@@ -7,4 +7,13 @@ env_variables:
   REFRESH_TOKEN_SECRET: {secret:REFRESH_TOKEN_SECRET}
   ACCESS_TOKEN_EXPIRATION_DURATION: '15m'
   REFRESH_EXPIRATION_DURATION: '180d'
+
+automatic_scaling:
+  target_cpu_utilization: 0.8
+  min_instances: 1
+  max_instances: 5
+  min_pending_latency: 30ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 40
+  max_idle_instances: 3
 

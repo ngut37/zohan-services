@@ -14,7 +14,9 @@ try {
   const port = config.get('PORT');
 
   // mongoose connect
-  initMongoose(() => console.log('Connected to DB!'));
+  initMongoose()
+    .then(() => console.log('Connected to DB!'))
+    .catch((err) => console.error(err));
 
   app.use(
     cors({

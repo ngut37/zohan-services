@@ -32,12 +32,12 @@ const schema = new Schema<CompanyAttributes, CompanyModel>(
       required: true,
     },
 
-    ...addressSchema,
-
     complete: {
       type: Boolean,
       default: false,
     },
+
+    ...addressSchema,
   },
   { timestamps: true },
 );

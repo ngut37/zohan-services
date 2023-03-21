@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "engines": {
-    "node": ">=12"
+    "node": "16.x.x"
   },
   "scripts": {
     "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
@@ -34,7 +34,7 @@
     "koa-jwt": "^4.0.3",
     "koa-router": "10.0.0",
     "mongodb": "4.9.0",
-    "mongoose": "6.5.2",
+    "mongoose": "6.4.6",
     "nconf": "0.11.3",
     "ts-node": "8.10.2",
     "tsconfig-paths": "3.11.0"
@@ -51,7 +51,6 @@
     "@types/koa-joi-router": "^8.0.0",
     "@types/koa-logger": "3.1.1",
     "@types/koa__cors": "3.0.3",
-    "@types/mongoose": "5.11.97",
     "@types/nconf": "0.10.1",
     "@types/node": "16.7.10",
     "@typescript-eslint/eslint-plugin": "4.29.3",

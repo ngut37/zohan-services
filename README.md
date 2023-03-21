@@ -40,5 +40,5 @@ $ yarn dev
 _📌 Note: this should be run locally. Change the `MONGO_URL` in `.env` and set the seeding destination_
 ```bash
 $ yarn build
-$ yarn start:seed-cadastral-data
+$ yarn start:seed-ruian-data
 ```

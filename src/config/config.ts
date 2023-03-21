@@ -2,10 +2,12 @@ import { createConfig } from './create-config';
 import { Config, ConfigKeys } from './types';
 import { CONFIG_KEYS } from '.';
 
-const checkEnvVarPresence = (key: ConfigKeys): boolean => {
-  const keyPresent = !process.env[key];
-  if (keyPresent) console.error(`${key} is absent in process.env file`);
-  return keyPresent;
+const checkEnvVarPresence = (key: ConfigKeys): void => {
+  const keyPresent = Boolean(process.env[key]);
+
+  if (!keyPresent) {
+    console.error(`${key} is absent in process.env file`);
+  }
 };
 
 // Check for mandatory environment variables

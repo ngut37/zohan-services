@@ -37,4 +37,8 @@ const schema = new Schema<MopAttributes, MopModel>(
   { timestamps: true },
 );
 
-export const Mop = mongoose.model<Mop>('Mop', schema, 'mops');
+export const Mop = mongoose.model<MopAttributes, MopModel>(
+  'Mop',
+  schema,
+  'mops',
+);
