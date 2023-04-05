@@ -1,5 +1,4 @@
 import joiRouter, { Joi } from 'koa-joi-router';
-import { ObjectId } from 'mongodb';
 
 import { CompanyAccessTokenPayload } from '@utils/company-auth';
 import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
@@ -19,7 +18,7 @@ type RequestBody = {
   email?: string;
   name?: string;
   role?: Role;
-  venues?: string[];
+  venue?: string;
 };
 
 const requestBodySchema = {
@@ -28,7 +27,7 @@ const requestBodySchema = {
   role: Joi.string()
     .valid(...Object.keys(ROLES))
     .required(),
-  venues: Joi.array().items(Joi.string().hex().length(24)),
+  venue: Joi.string().hex().length(24),
 };
 
 router.route({
@@ -45,7 +44,7 @@ router.route({
     }),
     async (ctx) => {
       const { id } = ctx.request.params as RequestParams;
-      const { email, name, role, venues } = ctx.request.body as RequestBody;
+      const { email, name, role, venue } = ctx.request.body as RequestBody;
       const { company } = ctx.state.auth as CompanyAccessTokenPayload;
 
       const [foundStaffToUpdate] = await Staff.find({ _id: id, company });
@@ -62,8 +61,9 @@ router.route({
           _id: { $ne: foundStaffToUpdate._id },
         });
 
-        if (userFoundByEmail)
+        if (userFoundByEmail) {
           return ctx.throw(409, 'This email has already been used.');
+        }
 
         foundStaffToUpdate.email = email;
       }
@@ -73,31 +73,30 @@ router.route({
       if (role) {
         foundStaffToUpdate.role = role;
       }
-      if (venues && venues.length) {
-        // check venues exist
-        const venuesObjectIds = venues.map(
-          (venueStringId) => new ObjectId(venueStringId),
-        );
-        const foundVenues = await Venue.find({
-          _id: { $in: venuesObjectIds },
+      if (venue) {
+        // check venue exists
+        const foundVenue = await Venue.findOne({
+          _id: venue,
         });
+
+        if (!foundVenue) {
+          return ctx.throw(400, `Venue with ID "${venue}" was not found.`);
+        }
 
         // check venues belong to staff's company
         if (
-          foundVenues.some(
-            (foundVenue) =>
-              foundVenue.company.toHexString() !==
-              foundStaffToUpdate.company.toHexString(),
-          )
+          foundVenue.company.toHexString() !==
+          foundStaffToUpdate.company.toHexString()
         ) {
           return ctx.throw(
             400,
             "At least one of the venues do not belong to staff's company",
           );
         }
-        foundStaffToUpdate.venues = venuesObjectIds;
+
+        foundStaffToUpdate.venue = foundVenue._id;
       } else {
-        foundStaffToUpdate.venues = [];
+        foundStaffToUpdate.venue = undefined;
       }
 
       await foundStaffToUpdate.save();

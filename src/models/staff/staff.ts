@@ -35,7 +35,7 @@ export type RawStaff = {
   password: Password;
   role: Role;
   company: Company['_id'];
-  venues?: Venue['_id'][];
+  venue?: Venue['_id'];
 };
 
 export type StaffAttributes = RawStaff & {
@@ -63,8 +63,8 @@ const schema = new Schema<StaffAttributes, StaffModel, StaffMethods>(
       ref: 'Company',
       required: true,
     },
-    venues: {
-      type: [Schema.Types.ObjectId],
+    venue: {
+      type: Schema.Types.ObjectId,
       ref: 'Venue',
     },
     role: roleSchema,

@@ -26,10 +26,10 @@ router.route({
           name: 1,
           email: 1,
           role: 1,
-          venues: 1,
+          venue: 1,
         },
         { sort: { createdAt: -1 } }, // DESC sort
-      ).populate('venues');
+      ).populate('venue');
 
       ctx.body = {
         success: true,

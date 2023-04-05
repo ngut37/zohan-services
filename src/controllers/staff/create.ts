@@ -12,7 +12,7 @@ type RequestBody = {
   email: string;
   name: string;
   role: Role;
-  venues: string[];
+  venue: string;
 };
 
 const requestBodySchema = {
@@ -21,7 +21,7 @@ const requestBodySchema = {
   role: Joi.string()
     .valid(...Object.keys(ROLES))
     .required(),
-  venues: Joi.array().items(Joi.string().hex().length(24)),
+  venue: Joi.string().hex().length(24),
 };
 
 router.route({
