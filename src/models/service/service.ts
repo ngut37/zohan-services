@@ -18,6 +18,7 @@ export type ServiceAttributes = {
   venue: Venue['_id'];
   staff: Staff['_id'][];
   length: number;
+  price: number;
 };
 
 type ServiceModel = Model<ServiceAttributes>;
@@ -49,6 +50,10 @@ const schema = new Schema<ServiceAttributes, ServiceModel>(
       },
     ],
     length: {
+      type: Number,
+      required: true,
+    },
+    price: {
       type: Number,
       required: true,
     },
