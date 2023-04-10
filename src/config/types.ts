@@ -16,6 +16,9 @@ type FullConfig = {
 
   /** URL of mapy.cz API used for address suggestions */
   SMAP_API_URL: string;
+
+  /** Size of service length chunks in minutes */
+  SERVICE_LENGTH_CHUNK_SIZE_IN_MINUTES: number;
 };
 
 export type Config = Partial<FullConfig>;

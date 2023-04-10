@@ -34,6 +34,9 @@ const defaultConfig = Object.freeze<Config>({
 
   // SMap API
   SMAP_API_URL: 'https://pro.mapy.cz',
+
+  // Service length chunk size
+  SERVICE_LENGTH_CHUNK_SIZE_IN_MINUTES: 15,
 });
 
 export const config = createConfig(
