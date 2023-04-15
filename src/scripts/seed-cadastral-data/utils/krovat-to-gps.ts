@@ -17,11 +17,14 @@ const wy = ((-1.58676 / 3600) * Math.PI) / 180;
 const wx = ((-4.99821 / 3600) * Math.PI) / 180;
 const m = 3.543e-6;
 
+/**
+ * This calculation was created by Reas.cz company.
+ */
 export const krovakStringToGps = (rawPoint: string, reverse?: boolean) => {
   const parsedRawPoint = rawPoint.split(' ');
   if (parsedRawPoint.length !== 2) return;
 
-  let point: [number, number] = [
+  let point: Coordinates = [
     Math.abs(Number.parseFloat(parsedRawPoint[0])),
     Math.abs(Number.parseFloat(parsedRawPoint[1])),
   ];
@@ -33,8 +36,10 @@ export const krovakStringToGps = (rawPoint: string, reverse?: boolean) => {
   return krovakToGps(point);
 };
 
+/**
+ * This calculation was created by Reas.cz company.
+ */
 export const krovakToGps = ([y, x]: [number, number], h = 200) => {
-  /* Přepočet vstupích údajů - vychazi z nejakeho skriptu, ktery jsem nasel na Internetu - nejsem autorem prepoctu. */
   /* Vypocet zemepisnych souradnic z rovinnych souradnic */
   let a = 6377397.15508;
   let ro = Math.sqrt(x * x + y * y);

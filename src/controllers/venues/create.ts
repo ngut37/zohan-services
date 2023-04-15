@@ -1,8 +1,10 @@
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
-import { Venue } from '@models/venue';
 import { CompanyAccessTokenPayload } from '@utils/company-auth';
+
+import { Venue } from '@models/venue';
+import { Coordinates } from '@models/types';
 
 import { mapLocationToIds } from '../utils/map-location-to-ids';
 
@@ -14,7 +16,7 @@ type RequestBody = {
   regionString: string;
   districtString: string;
   quarterString?: string; // momc
-  coordinates: [number, number]; // momc
+  coordinates: Coordinates; // momc
 };
 
 const requestBodySchema = {

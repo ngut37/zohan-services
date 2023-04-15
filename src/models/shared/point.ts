@@ -1,8 +1,10 @@
+import { Coordinates } from '@models/types';
+
 import { mongoose } from '..';
 
 export type Point = {
   type: 'Point';
-  coordinates: [number, number];
+  coordinates: Coordinates;
 };
 
 export const pointSchema = new mongoose.Schema(

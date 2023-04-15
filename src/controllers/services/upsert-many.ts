@@ -40,7 +40,7 @@ const requestBodySchema = {
         .valid(...Object.keys(SERVICE_NAMES))
         .required(),
       venue: Joi.string().hex().length(24),
-      staff: Joi.array().items(Joi.string().hex().length(24)).required(),
+      staff: Joi.array().items(Joi.string().hex().length(24)),
       length: Joi.number()
         .integer()
         .positive()
