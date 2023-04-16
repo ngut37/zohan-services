@@ -1,4 +1,5 @@
 import { Schema, Model, HydratedDocument } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 import { Venue } from '@models/venue';
 import { Staff } from '@models/staff';
@@ -12,7 +13,7 @@ import {
 } from './types';
 
 export type ServiceAttributes = {
-  _id: number;
+  _id: ObjectId;
   type: ServiceType;
   name: ServiceName;
   venue: Venue['_id'];

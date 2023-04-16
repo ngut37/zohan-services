@@ -1,4 +1,5 @@
-import { Schema, ObjectId, Model, HydratedDocument } from 'mongoose';
+import { Schema, Model, HydratedDocument } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 import { Timestamps } from '@models/shared/timestamp';
 import { Password, passwordSchema } from '@models/shared';
