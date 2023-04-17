@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:security/recommended',
   ],
   env: {
     commonjs: true,
@@ -19,7 +20,7 @@ module.exports = {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  plugins: ['@typescript-eslint', 'filenames', 'prettier'],
+  plugins: ['@typescript-eslint', 'filenames', 'prettier', 'security'],
   rules: {
     // typescript
     '@typescript-eslint/explicit-member-accessibility': ['off'],
