@@ -33,7 +33,7 @@ router.route({
 
       ctx.body = {
         success: true,
-        data: { staff: fetchedStaffByCompanyId },
+        data: fetchedStaffByCompanyId,
       };
     },
   ],

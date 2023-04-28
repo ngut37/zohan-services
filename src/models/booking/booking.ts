@@ -19,9 +19,9 @@ export type BookingAttributes = {
   | {
       existingCustomer?: never;
       customCustomer?: {
-        name: string;
-        email: string;
-        phone: string;
+        name?: string;
+        email?: string;
+        phone?: string;
       };
     }
   | {
@@ -66,21 +66,20 @@ const schema = new Schema<BookingAttributes, BookingModel>(
     customCustomer: {
       name: {
         type: String,
-        required: true,
       },
       email: {
         type: String,
-        required: true,
       },
       phone: {
         type: String,
-        required: true,
       },
-      required: false,
     },
   },
   { timestamps: true },
 );
+
+// used by main dashboard in administration
+schema.index({ start: 1, end: 1, venue: 1 });
 
 export const Booking = mongoose.model<BookingAttributes, BookingModel>(
   'Booking',

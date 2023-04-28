@@ -46,7 +46,7 @@ router.route({
 
       ctx.body = {
         success: true,
-        data: { venues: venuesWithPopulatedLocation },
+        data: venuesWithPopulatedLocation,
       };
     },
   ],
