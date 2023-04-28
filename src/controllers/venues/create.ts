@@ -73,7 +73,7 @@ router.route({
 
       ctx.body = {
         success: true,
-        data: { createdVenue },
+        data: createdVenue,
       };
     },
   ],
