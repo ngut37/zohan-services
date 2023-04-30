@@ -3,9 +3,11 @@ import joiRouter from 'koa-joi-router';
 import loginRouter from './login';
 import logoutRouter from './logout';
 import refreshTokenRouter from './refresh-token';
+
 import getAllRouter from './get-all';
 import editRouter from './edit';
 import createRouter from './create';
+import deleteRouter from './delete';
 
 const router = joiRouter();
 
@@ -20,5 +22,6 @@ router.use(refreshTokenRouter.middleware());
 router.use(getAllRouter.middleware());
 router.use(createRouter.middleware());
 router.use(editRouter.middleware());
+router.use(deleteRouter.middleware());
 
 export default router;

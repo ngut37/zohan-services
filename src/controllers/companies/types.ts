@@ -1,3 +1,5 @@
+import { Coordinates } from '@models/types';
+
 export type CompanyFormData = {
   ico: string;
   name: string;
@@ -8,6 +10,7 @@ export type CompanyFormData = {
   districtString: string;
   /** momc */
   quarterString?: string;
+  coordinates?: Coordinates;
 
   complete?: boolean;
 };

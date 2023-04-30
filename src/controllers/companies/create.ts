@@ -39,6 +39,7 @@ const requestBodySchema = {
   regionString: Joi.string().required(),
   districtString: Joi.string().required(),
   quarterString: Joi.string(), // momc
+  coordinates: Joi.array().items(Joi.number()).length(2),
 
   staffName: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -62,6 +63,7 @@ router.route({
         regionString,
         districtString,
         quarterString,
+        coordinates: _coordinates, // not used for Company model
         staffName,
         email,
         password,
