@@ -44,6 +44,8 @@ router.route({
         region: foundVenue.region.name,
         district: foundVenue.district.name,
         momc: foundVenue.momc?.name,
+        businessHours: foundVenue.businessHours,
+        coordinates: foundVenue.location.coordinates,
       };
 
       ctx.body = {
