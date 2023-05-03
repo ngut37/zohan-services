@@ -33,13 +33,23 @@ router.route({
       }>(['region', 'district', 'momc']);
 
       const venuesWithPopulatedLocation = fetchedVenuesByCompanyId.map(
-        ({ _id, stringAddress, region, district, momc }) => {
+        ({
+          _id,
+          stringAddress,
+          region,
+          district,
+          momc,
+          location,
+          businessHours,
+        }) => {
           return {
             _id,
             stringAddress,
             region: region.name,
             district: district.name,
             momc: momc?.name,
+            coordinates: location.coordinates,
+            businessHours,
           };
         },
       );

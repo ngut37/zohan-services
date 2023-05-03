@@ -4,9 +4,10 @@ import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
 import { CompanyAccessTokenPayload } from '@utils/company-auth';
 
-import { Venue } from '@models/venue';
+import { Venue, WeeklyBusinessHours } from '@models/venue';
 import { Coordinates } from '@models/types';
 
+import { validateBusinessHours } from '../utils/validate-business-hours';
 import { mapLocationToIds } from '../utils/map-location-to-ids';
 
 const router = joiRouter();
@@ -22,7 +23,20 @@ type RequestBody = {
   districtString: string;
   quarterString?: string; // momc
   coordinates: Coordinates; // momc
+
+  businessHours: WeeklyBusinessHours;
 };
+
+const businessHoursJoiSchema = Joi.object({
+  openingTime: Joi.object({
+    hour: Joi.number().min(0).max(23).required(),
+    minute: Joi.number().min(0).max(59).required(),
+  }).required(),
+  closingTime: Joi.object({
+    hour: Joi.number().min(0).max(23).required(),
+    minute: Joi.number().min(0).max(59).required(),
+  }).required(),
+});
 
 const requestBodySchema = {
   stringAddress: Joi.string().required(),
@@ -31,6 +45,16 @@ const requestBodySchema = {
   districtString: Joi.string().required(),
   quarterString: Joi.string().allow(''), // momc
   coordinates: Joi.array().items(Joi.number()).length(2).required(), // momc
+
+  businessHours: Joi.object({
+    mon: businessHoursJoiSchema,
+    tue: businessHoursJoiSchema,
+    wed: businessHoursJoiSchema,
+    thu: businessHoursJoiSchema,
+    fri: businessHoursJoiSchema,
+    sat: businessHoursJoiSchema,
+    sun: businessHoursJoiSchema,
+  }).required(),
 };
 
 router.route({
@@ -56,7 +80,14 @@ router.route({
         districtString,
         quarterString,
         coordinates,
+        businessHours,
       } = body;
+
+      try {
+        validateBusinessHours(businessHours);
+      } catch (error) {
+        return ctx.throw(400, error.message);
+      }
 
       const [foundVenueToUpdate] = await Venue.find({ _id: id, company });
 
@@ -77,6 +108,7 @@ router.route({
       foundVenueToUpdate.mop = mop;
       foundVenueToUpdate.momc = momc;
       foundVenueToUpdate.location.coordinates = coordinates;
+      foundVenueToUpdate.businessHours = businessHours;
 
       await foundVenueToUpdate.save();
 
