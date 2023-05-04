@@ -8,6 +8,7 @@ import getAllRouter from './get-all';
 import editRouter from './edit';
 import createRouter from './create';
 import deleteRouter from './delete';
+import getBookingsRouter from './get-bookings';
 
 const router = joiRouter();
 
@@ -23,5 +24,6 @@ router.use(getAllRouter.middleware());
 router.use(createRouter.middleware());
 router.use(editRouter.middleware());
 router.use(deleteRouter.middleware());
+router.use(getBookingsRouter.middleware());
 
 export default router;
