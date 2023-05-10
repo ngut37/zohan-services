@@ -26,12 +26,17 @@ router.route({
   handler: [
     adminProtectRouteMiddleware({
       allowUnauthorized: false,
-      allowedRoles: ['admin', 'editor'],
+      allowedRoles: ['admin'],
     }),
     async (ctx) => {
       const { company } = ctx.state.auth as CompanyAccessTokenPayload;
       const params = ctx.request.params as RequestParams;
       const { id } = params;
+
+      // Check if staff is deleting themselves
+      if (id === ctx.state.auth.id) {
+        return ctx.throw(400, 'You cannot delete yourself');
+      }
 
       // Check if staff member exists for the company from access token
       const staff = await Staff.findOne({

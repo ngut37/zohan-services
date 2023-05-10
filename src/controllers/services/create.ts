@@ -51,7 +51,7 @@ router.route({
   handler: [
     adminProtectRouteMiddleware({
       allowUnauthorized: false,
-      allowedRoles: ['admin', 'editor'],
+      allowedRoles: ['admin'],
     }),
     async (ctx) => {
       const body = ctx.request.body as RequestBody;

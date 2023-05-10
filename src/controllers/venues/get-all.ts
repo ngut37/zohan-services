@@ -17,7 +17,6 @@ router.route({
   handler: [
     adminProtectRouteMiddleware({
       allowUnauthorized: false,
-      allowedRoles: ['admin', 'editor'],
     }),
     async (ctx) => {
       const { company } = ctx.state.auth as CompanyAccessTokenPayload;

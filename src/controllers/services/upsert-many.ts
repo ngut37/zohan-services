@@ -14,10 +14,12 @@ import {
   SERVICE_TYPES,
 } from '@models/service';
 import { Service } from '@models/service';
+import { Booking } from '@models/booking';
 
 const router = joiRouter();
 
 type RequestBody = {
+  venue: string;
   services: {
     id?: string;
     type: ServiceType;
@@ -30,6 +32,7 @@ type RequestBody = {
 };
 
 const requestBodySchema = {
+  venue: Joi.string().hex().length(24),
   services: Joi.array()
     .items({
       id: Joi.string().hex().length(24),
@@ -60,20 +63,13 @@ router.route({
   handler: [
     adminProtectRouteMiddleware({
       allowUnauthorized: false,
-      allowedRoles: ['admin', 'editor'],
+      allowedRoles: ['admin'],
     }),
     async (ctx) => {
       const body = ctx.request.body as RequestBody;
       const { company } = ctx.state.auth as CompanyAccessTokenPayload;
 
-      const { services } = body;
-
-      if (services.length === 0) {
-        // skipping empty array
-        return;
-      }
-
-      const venue = services[0].venue;
+      const { venue, services } = body;
 
       // get venue and check if it belongs to the company of the staff
       const foundVenue = await Venue.findOne({
@@ -86,13 +82,18 @@ router.route({
         return;
       }
 
+      // get services for venue
+      const foundServices = await Service.find({
+        venue,
+      });
+
       /**
        * To save on upsert DB operations,
        * check if service already has ID:
        * - it does -> update it
        * - if not -> upsert it
        */
-      const bulkOperations = services.map((service) => {
+      const bulkOperations: any = services.map((service) => {
         if (service.id) {
           return {
             updateOne: {
@@ -133,7 +134,28 @@ router.route({
         };
       });
 
+      const deletedServices: string[] = [];
+      // delete services that do not exist in the request
+      foundServices.forEach((service) => {
+        const foundService = services.find((s) => s.id === service.id);
+
+        if (!foundService) {
+          bulkOperations.push({
+            deleteOne: {
+              filter: { _id: service.id },
+            },
+          });
+          deletedServices.push(service.id);
+        }
+      });
+
       await Service.bulkWrite(bulkOperations);
+
+      if (deletedServices.length) {
+        await Booking.deleteMany({
+          service: { $in: deletedServices },
+        });
+      }
 
       ctx.body = {
         success: true,

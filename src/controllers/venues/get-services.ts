@@ -19,7 +19,6 @@ router.route({
   handler: [
     adminProtectRouteMiddleware({
       allowUnauthorized: false,
-      allowedRoles: ['admin', 'editor'],
     }),
     async (ctx) => {
       const { id } = ctx.request.params as RequestParams;
