@@ -1,0 +1,131 @@
+EN:
+- barbershop:
+  - classic haircut
+  - classic haircut - long hair
+  - clipper cut
+  - hair styling
+  - hair coloring
+  - traditional shaving
+  - beard care
+  - beard styling
+  - beard coloring
+  - nose hair removal
+- hair-salon:
+  - men's haircut
+  - men's electric razor cut
+  - men's hair coloring
+  - women's haircut
+  - children's haircut
+  - hair root coloring
+  - foil highlights
+  - balayage
+  - airtouch
+  - brazilian keratin
+  - formal / wedding hairstyle
+  - blow-dry
+  - flat ironing
+  - complete hair bleaching with toning
+  - hair root bleaching with toning
+- manicure:
+  - clear manicure
+  - acrylic nails - with glitter
+  - acrylic nails - new - with color
+  - acrylic nails - refill - colorless
+  - acrylic nails - with color
+  - acrylic nails - french
+  - gel nails - new - colorless
+  - gel nails - refill - colorless
+  - gel nails - with color
+  - gel nails - with glitter
+  - gel nails - french
+  - p-shine clear
+- pedicure:
+  - wet pedicure
+  - dry machine pedicure (medical)
+  - combined pedicure
+  - luxury spa pedicure
+  - nail treatment
+  - peeling
+  - mask
+  - foot massage
+  - nail polish
+  - french nail polish
+  - acrylic nails
+  - gel nails
+  - ingrown nail treatment
+  - callus removal
+- massage:
+  - thai massage
+  - classic massage
+  - medical massage
+  - reflexology massage
+  - special massage
+  - lymphatic massage
+  - tantra massage
+
+
+
+CZ:
+- pánský barbershop:
+  - klasické stříhání
+  - klasické stříhání - dlouhé vlasy
+  - střih strojkem
+  - styling vlasů
+  - barvení vlasů
+  - tradiční holení
+  - péče o vousy
+  - styling vousů
+  - barvení vousů
+  - odstranění chloupků v nose
+- hair-salon:
+  - pánské stříhání
+  - pánské stříhání pouze se strojkem
+  - panské barvení vlasů
+  - dámské stříhání
+  - dětské stříhání
+  - barvení odrostů
+  - melír (fólie)
+  - balayage
+  - airtouch
+  - brazilský keratin
+  - slavnostní / svatební účes
+  - foukaná
+  - žehlení
+  - kompletní odbarvení celých vlasů s tónovaním
+  - odbarvení odrostů s tónováním
+- manikúra:
+  - manikúra čistá
+  - akrylové nehty – s třpytkami
+  - akrylové nehty – nové – s barvou
+  - akrylové nehty – doplnění – bez barvy
+  - akrylové nehty – s barvou
+  - akrylové nehty – francouzské
+  - gelové nehty – nové – bez barvy
+  - gelové nehty – doplnění – bez barvy
+  - gelové nehty – s barvou
+  - gelové nehty – s třpytkami
+  - gelové nehty – francouzské
+  - p-shine čistá
+- pedikúra:
+  - pedikúra mokrá
+  - pedikúra přístrojová (suchá, medicinální)
+  - pedikúra kombinovaná
+  - spa pedikúra luxusní
+  - úprava nehtů
+  - peeling
+  - maska
+  - masáž nohou
+  - lakování
+  - lakování - francouzské
+  - akrylové nehty
+  - gelové nehty
+  - ošetření zarostlého nehtu
+  - odstranění kuřích ok
+- masáž:
+  - thajské masáž
+  - klasické masáž
+  - zdravotní masáž
+  - reflexní masáž
+  - speciální masáž
+  - lymfatické masáž
+  - tantra masáž
