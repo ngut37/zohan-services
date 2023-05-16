@@ -22,9 +22,11 @@ router.route({
 
       const userExists = await User.exists({ email: { $regex: emailRegex } });
 
+      ctx.status = 200;
+
       ctx.body = {
         success: true,
-        data: userExists,
+        data: Boolean(userExists),
       };
     },
   ],

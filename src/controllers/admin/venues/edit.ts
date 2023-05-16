@@ -7,8 +7,8 @@ import { CompanyAccessTokenPayload } from '@utils/company-auth';
 import { Venue, WeeklyBusinessHours } from '@models/venue';
 import { Coordinates } from '@models/types';
 
-import { validateBusinessHours } from '../utils/validate-business-hours';
-import { mapLocationToIds } from '../utils/map-location-to-ids';
+import { validateBusinessHours } from '../../utils/validate-business-hours';
+import { mapLocationToIds } from '../../utils/map-location-to-ids';
 
 const router = joiRouter();
 
