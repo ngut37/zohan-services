@@ -71,7 +71,16 @@ const schema = new Schema<VenueAttributes, VenueModel>(
   { timestamps: true },
 );
 
-// TODO: create index for look-up
+schema.index(
+  {
+    momc: 1,
+    district: 1,
+    region: 1,
+  },
+  {
+    name: 'venue_list',
+  },
+);
 
 export const Venue = mongoose.model<VenueAttributes, VenueModel>(
   'Venue',

@@ -62,6 +62,8 @@ const schema = new Schema<ServiceAttributes, ServiceModel>(
   { timestamps: true },
 );
 
+schema.index({ venue: 1 }, { name: 'venue_list' });
+
 export const Service = mongoose.model<ServiceAttributes, ServiceModel>(
   'Service',
   schema,
