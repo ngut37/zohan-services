@@ -6,7 +6,7 @@ import { CompanyAccessTokenPayload } from '@utils/company-auth';
 import { Venue } from '@models/venue';
 import { Coordinates } from '@models/types';
 
-import { mapLocationToIds } from '../utils/map-location-to-ids';
+import { mapLocationToIds } from '../../utils/map-location-to-ids';
 
 const router = joiRouter();
 

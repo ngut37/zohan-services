@@ -12,12 +12,12 @@ const router = joiRouter();
 
 router.prefix('/venues');
 
-router.use(createRouter.middleware());
-router.use(editRouter.middleware());
-router.use(deleteRouter.middleware());
 router.use(getAllRouter.middleware());
 router.use(getRouter.middleware());
 router.use(getServicesRouter.middleware());
 router.use(getStaffRouter.middleware());
+router.use(editRouter.middleware());
+router.use(deleteRouter.middleware());
+router.use(createRouter.middleware());
 
 export default router;
