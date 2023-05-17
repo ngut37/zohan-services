@@ -36,8 +36,6 @@ router.route({
       const { venueId, start, end } = ctx.request.query as RequestQuery;
       const { company } = ctx.state.auth as CompanyAccessTokenPayload;
 
-      // give me iso date of 2022-01-01T00:00:00.000Z
-
       // validate that start is before end
       if (new Date(start) > new Date(end)) {
         return ctx.throw(400, 'Start date must be before end date');
@@ -68,7 +66,7 @@ router.route({
       }
 
       /**
-       * Map booking to depopulated venue
+       * Map booking to depopulate venue
        * and remove private fields in existingCustomer
        */
 

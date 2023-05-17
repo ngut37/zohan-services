@@ -5,6 +5,7 @@ import adminRouter from './admin';
 import addressRouter from './address';
 import authRouter from './auth';
 import venuesRouter from './venues';
+import bookingsRouter from './bookings';
 import testRouter from './test';
 
 const router = new Router();
@@ -16,6 +17,7 @@ router.use(adminRouter.middleware());
 router.use(addressRouter.middleware());
 router.use(authRouter.middleware());
 router.use(venuesRouter.middleware());
+router.use(bookingsRouter.middleware());
 
 // test routes
 router.use(testRouter.middleware());

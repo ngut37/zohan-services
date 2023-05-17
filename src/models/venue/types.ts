@@ -1,5 +1,7 @@
 import { Schema } from 'mongoose';
 
+import { enumerate } from '@utils/enumerate';
+
 export type Time = {
   hour: number;
   minute: number;
@@ -10,16 +12,21 @@ export type BusinessHoursInterval = {
   closingTime: Time;
 };
 
-export type WeeklyBusinessHours = {
-  mon?: BusinessHoursInterval;
-  tue?: BusinessHoursInterval;
-  wed?: BusinessHoursInterval;
-  thu?: BusinessHoursInterval;
-  fri?: BusinessHoursInterval;
-  sat?: BusinessHoursInterval;
-  sun?: BusinessHoursInterval;
-};
+export const DAYS = enumerate([
+  'mon',
+  'tue',
+  'wed',
+  'thu',
+  'fri',
+  'sat',
+  'sun',
+]);
 
+export type Day = keyof typeof DAYS;
+
+export type WeeklyBusinessHours = Partial<
+  { [x in Day]: BusinessHoursInterval }
+>;
 const businessHoursIntervalSchema = new Schema<BusinessHoursInterval>(
   {
     openingTime: {
