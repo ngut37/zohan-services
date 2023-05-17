@@ -78,8 +78,11 @@ const schema = new Schema<BookingAttributes, BookingModel>(
   { timestamps: true },
 );
 
-// used by main dashboard in administration
-schema.index({ start: 1, end: 1, venue: 1 });
+// used by main dashboard in administration and by get available slots
+schema.index(
+  { start: 1, end: 1, venue: 1, staff: 1 },
+  { name: 'get_bookings_and_available_slots' },
+);
 
 export const Booking = mongoose.model<BookingAttributes, BookingModel>(
   'Booking',
