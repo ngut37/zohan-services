@@ -14,8 +14,8 @@ export function generateRefreshToken(this: Staff) {
 
   const generatedToken = sign(
     payload,
-    config.get(CONFIG_KEYS.REFRESH_TOKEN_SECRET),
-    { expiresIn: config.get(CONFIG_KEYS.REFRESH_EXPIRATION_DURATION) },
+    config.get(CONFIG_KEYS.ADMIN_REFRESH_TOKEN_SECRET),
+    { expiresIn: config.get(CONFIG_KEYS.ADMIN_REFRESH_EXPIRATION_DURATION) },
   );
   return generatedToken;
 }
