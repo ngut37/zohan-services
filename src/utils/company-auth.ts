@@ -35,7 +35,7 @@ export const validateCompanyAccessToken = (
   try {
     const payload = verify(
       token,
-      config.get(CONFIG_KEYS.ACCESS_TOKEN_SECRET),
+      config.get(CONFIG_KEYS.ADMIN_ACCESS_TOKEN_SECRET),
       verifyOptions,
     ) as CompanyAccessTokenPayload;
     return payload;
@@ -48,7 +48,7 @@ export const validateCompanyRefreshToken = (token: string) => {
   try {
     const payload = verify(
       token,
-      config.get(CONFIG_KEYS.REFRESH_TOKEN_SECRET),
+      config.get(CONFIG_KEYS.ADMIN_REFRESH_TOKEN_SECRET),
     ) as CompanyAccessTokenPayload;
     return payload;
   } catch {

@@ -25,8 +25,10 @@ export function generateAccessToken(
 
   const generatedToken = sign(
     payload,
-    config.get(CONFIG_KEYS.ACCESS_TOKEN_SECRET),
-    { expiresIn: config.get(CONFIG_KEYS.ACCESS_TOKEN_EXPIRATION_DURATION) },
+    config.get(CONFIG_KEYS.ADMIN_ACCESS_TOKEN_SECRET),
+    {
+      expiresIn: config.get(CONFIG_KEYS.ADMIN_ACCESS_TOKEN_EXPIRATION_DURATION),
+    },
   );
   return generatedToken;
 }

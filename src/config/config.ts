@@ -14,6 +14,8 @@ const checkEnvVarPresence = (key: ConfigKeys): void => {
 checkEnvVarPresence(CONFIG_KEYS.MONGO_URL);
 checkEnvVarPresence(CONFIG_KEYS.ACCESS_TOKEN_SECRET);
 checkEnvVarPresence(CONFIG_KEYS.REFRESH_TOKEN_SECRET);
+checkEnvVarPresence(CONFIG_KEYS.ADMIN_ACCESS_TOKEN_SECRET);
+checkEnvVarPresence(CONFIG_KEYS.ADMIN_REFRESH_TOKEN_SECRET);
 
 const defaultConfig = Object.freeze<Config>({
   // App
@@ -22,11 +24,17 @@ const defaultConfig = Object.freeze<Config>({
   // Token secrets
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+  ADMIN_ACCESS_TOKEN_SECRET: process.env.ADMIN_ACCESS_TOKEN_SECRET,
+  ADMIN_REFRESH_TOKEN_SECRET: process.env.ADMIN_REFRESH_TOKEN_SECRET,
 
   // Token expiration
   ACCESS_TOKEN_EXPIRATION_DURATION:
     process.env.ACCESS_TOKEN_EXPIRATION_DURATION || '5m',
   REFRESH_EXPIRATION_DURATION:
+    process.env.REFRESH_EXPIRATION_DURATION || '180d',
+  ADMIN_ACCESS_TOKEN_EXPIRATION_DURATION:
+    process.env.ACCESS_TOKEN_EXPIRATION_DURATION || '5m',
+  ADMIN_REFRESH_EXPIRATION_DURATION:
     process.env.REFRESH_EXPIRATION_DURATION || '180d',
 
   // MongoDB

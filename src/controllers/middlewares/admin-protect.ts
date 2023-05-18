@@ -38,7 +38,7 @@ export const adminProtectRouteMiddleware = (
 
   return [
     jwtMiddleware({
-      secret: config.get(CONFIG_KEYS.ACCESS_TOKEN_SECRET),
+      secret: config.get(CONFIG_KEYS.ADMIN_ACCESS_TOKEN_SECRET),
       key: 'auth',
       passthrough: allowUnauthorized,
     }),

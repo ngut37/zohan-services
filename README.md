@@ -27,6 +27,10 @@ $ yarn
 - `REFRESH_TOKEN_SECRET` - (string) secret for generating and validating refresh tokens
 - `ACCESS_TOKEN_EXPIRATION_DURATION` - (timespan format [vercel/ms](https://github.com/zeit/ms.js)) access token expiration time
 - `REFRESH_EXPIRATION_DURATION` - (timespan format [vercel/ms](https://github.com/zeit/ms.js)) refresh token expiration interval
+- `ADMIN_ACCESS_TOKEN_SECRET` - (string) secret for generating and validating access tokens for admin
+- `ADMIN_REFRESH_TOKEN_SECRET` - (string) secret for generating and validating refresh tokens for admin
+- `ADMIN_ACCESS_TOKEN_EXPIRATION_DURATION` - (timespan format [vercel/ms](https://github.com/zeit/ms.js)) access token expiration time for admin
+- `ADMIN_REFRESH_EXPIRATION_DURATION` - (timespan format [vercel/ms](https://github.com/zeit/ms.js)) refresh token expiration interval for admin
 ### Build and run
 ```bash
 $ yarn build
