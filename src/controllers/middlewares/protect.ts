@@ -1,43 +1,65 @@
-import { ParameterizedContext, Middleware } from 'koa';
+import { Middleware } from 'koa';
+import jwtMiddleware from 'koa-jwt';
+
+import { assertNonNullish } from '@utils/assert-non-nullish';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 import { AccessTokenPayload, validateAccessToken } from '@utils/auth';
+import { User } from '@models/user';
 
 export type ProtectRouteMiddlewareOptions = {
   allowUnauthorized?: boolean;
 };
 
 export const protectRouteMiddleware = (
-  protectOptions: ProtectRouteMiddlewareOptions,
-): [Middleware, Middleware<{ auth?: AccessTokenPayload }>] => {
+  protectOptions: ProtectRouteMiddlewareOptions = { allowUnauthorized: false },
+): [
+  Middleware,
+  Middleware<{
+    auth?: AccessTokenPayload;
+  }>,
+] => {
+  const { allowUnauthorized } = protectOptions;
+
   return [
-    (ctx, next) => {
-      const accessToken = ctx.cookies.get('access_token');
+    jwtMiddleware({
+      secret: config.get(CONFIG_KEYS.ACCESS_TOKEN_SECRET),
+      key: 'auth',
+      passthrough: allowUnauthorized,
+    }),
+    async (ctx, next) => {
+      // if passthrough is false, JWT has to be valid at this point
+      try {
+        assertNonNullish(ctx.state.auth);
+      } catch (err) {
+        if (!allowUnauthorized) return ctx.throw(401, 'Invalid access token');
 
-      if (!accessToken) {
-        return ctx.throw(401);
+        const header = ctx.headers.authorization;
+        if (!header) return next();
+        const [type, token] = header.split(' ');
+        if (type !== 'Bearer') return next();
+        if (!token) return next();
+
+        const decodedToken = validateAccessToken(token, {
+          ignoreExpiration: true,
+        });
+
+        if (!decodedToken) return next();
+
+        ctx.state.auth = {
+          ...(decodedToken as AccessTokenPayload), // JWT payload
+        };
       }
 
-      // validate and extract access token payload
-      const accessTokenPayload = validateAccessToken(accessToken, {
-        ignoreExpiration: true,
-      });
+      const user = await User.findById(ctx.state.auth.id);
 
-      if (!accessTokenPayload) {
-        return ctx.throw(401);
+      if (!allowUnauthorized) {
+        if (!user) return ctx.throw(401); // staff not found
       }
 
-      ctx.state.auth = accessTokenPayload;
-
-      return next();
-    },
-    (ctx: ParameterizedContext<{ auth?: AccessTokenPayload }>, next) => {
-      const { allowUnauthorized } = protectOptions;
-
-      // no auth provided
-      if (!ctx.state.auth) {
-        if (!allowUnauthorized) return ctx.throw(401);
-        else return next();
-      }
+      // TODO: use fetched staff to set ctx.state.auth
 
       return next();
     },
