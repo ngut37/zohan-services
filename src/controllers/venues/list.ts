@@ -1,16 +1,19 @@
 import joiRouter, { Joi } from 'koa-joi-router';
 
-import { Service, ServiceName, SERVICE_NAMES } from '@models/service';
+import {
+  ServiceName,
+  ServiceType,
+  SERVICE_NAMES,
+  SERVICE_TYPES,
+} from '@models/service';
 import { Venue, VenueAttributes } from '@models/venue';
 import { PipelineStage } from 'mongoose';
-import { Region } from '@models/region';
-import { District } from '@models/district';
-import { Momc } from '@models/momc';
 
 type RequestQuery = {
   region?: string;
-  district?: string;
-  momc?: string;
+  districts?: string[];
+  mops?: string[];
+  serviceType?: ServiceType;
   serviceNames?: ServiceName[];
 
   page: string;
@@ -19,9 +22,19 @@ type RequestQuery = {
 
 const requestQuerySchema = {
   // location filter
-  region: Joi.number().integer().min(1),
-  district: Joi.number().integer().min(1),
-  momc: Joi.number().integer().min(1),
+  region: Joi.number().integer().min(1).optional(),
+  districts: Joi.string().custom((value) => {
+    const districts = JSON.parse(value) as any[];
+
+    return districts.map(Number);
+  }),
+  mops: Joi.string().custom((value) => {
+    const mops = JSON.parse(value) as any[];
+
+    return mops.map(Number);
+  }),
+
+  serviceType: Joi.string().valid(...Object.values(SERVICE_TYPES)),
 
   // check that serviceNames is an array of valid service names
   serviceNames: Joi.string().custom((value, helpers) => {
@@ -54,16 +67,13 @@ router.route({
   },
   handler: [
     async (ctx) => {
-      if (ctx.request.query) {
-        console.log(ctx.request.query);
-      }
-
       const query = ctx.request.query as RequestQuery;
 
       const {
         region,
-        district,
-        momc,
+        districts,
+        mops,
+        serviceType,
         serviceNames,
 
         page,
@@ -75,8 +85,8 @@ router.route({
         {
           $match: {
             ...(region ? { region } : {}),
-            ...(district ? { district } : {}),
-            ...(momc ? { momc } : {}),
+            ...(districts ? { district: { $in: districts } } : {}),
+            ...(mops ? { mop: { $in: mops } } : {}),
           },
         },
 
@@ -90,7 +100,7 @@ router.route({
           },
         },
 
-        // lookup region, district, and momc
+        // lookup region, district, and mop
         {
           $lookup: {
             from: 'regions',
@@ -109,51 +119,32 @@ router.route({
         },
         {
           $lookup: {
-            from: 'momcs',
-            localField: 'momc',
+            from: 'mops',
+            localField: 'mop',
             foreignField: '_id',
-            as: 'momc',
+            as: 'mop',
           },
         },
-
-        // project only names of region, district, and momc
         {
-          $project: {
-            name: 1,
-            company: { $arrayElemAt: ['$company.name', 0] },
-            stringAddress: 1,
-            region: { $arrayElemAt: ['$region.name', 0] },
-            district: { $arrayElemAt: ['$district.name', 0] },
-            momc: { $arrayElemAt: ['$momc.name', 0] },
-          },
-        },
-      ];
-
-      if (serviceNames?.length) {
-        pipelineStages.push({
           $lookup: {
             from: 'services',
             localField: '_id',
             foreignField: 'venue',
             as: 'services',
           },
-        });
+        },
+      ];
 
+      if (serviceNames?.length) {
         pipelineStages.push({
           $match: {
             'services.name': { $in: serviceNames },
           },
         });
-
+      } else if (serviceType) {
         pipelineStages.push({
-          $project: {
-            name: 1,
-            company: 1,
-            stringAddress: 1,
-            region: 1,
-            district: 1,
-            momc: 1,
-            services: '$services.type', // Include the service types as an array
+          $match: {
+            'services.type': serviceType,
           },
         });
       }
@@ -169,22 +160,34 @@ router.route({
       pipelineStages.push({
         $limit: Number(limit),
       });
+      pipelineStages.push(
+        // project only names of region, district, and mop
+        {
+          $project: {
+            name: 1,
+            company: { $arrayElemAt: ['$company.name', 0] },
+            stringAddress: 1,
+            region: { $arrayElemAt: ['$region.name', 0] },
+            district: { $arrayElemAt: ['$district.name', 0] },
+            mop: { $arrayElemAt: ['$mop.name', 0] },
+            services: '$services.type', // include the service types as an array
+          },
+        },
+      );
 
       const aggregationResult = (await Venue.aggregate<any>(
         pipelineStages,
       ).exec()) as (VenueAttributes & {
-        services?: Service[];
-        region?: Region;
-        district?: District;
-        momc?: Momc;
+        services?: ServiceType[];
+        region?: string;
+        district?: string;
+        mop?: string;
       })[];
 
       // make services an array a set of unique values
-      if (serviceNames?.length) {
-        aggregationResult.forEach((venue) => {
-          venue.services = [...new Set(venue.services)];
-        });
-      }
+      aggregationResult.forEach((venue) => {
+        venue.services = [...new Set(venue.services)];
+      });
 
       ctx.body = {
         success: true,

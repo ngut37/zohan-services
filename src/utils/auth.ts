@@ -12,6 +12,8 @@ export type AccessTokenPayload = Pick<
   'id' | 'name' | 'email' | 'phoneNumber' | 'oAuth' | 'avatarUrl'
 >;
 
+export type CompleteAccessTokenPayload = AccessTokenPayload & { user: User };
+
 export const validateAccessToken = (
   token: string,
   verifyOptions?: VerifyOptions,

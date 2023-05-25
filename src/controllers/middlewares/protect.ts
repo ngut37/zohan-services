@@ -6,7 +6,7 @@ import { assertNonNullish } from '@utils/assert-non-nullish';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { AccessTokenPayload, validateAccessToken } from '@utils/auth';
+import { CompleteAccessTokenPayload, validateAccessToken } from '@utils/auth';
 import { User } from '@models/user';
 
 export type ProtectRouteMiddlewareOptions = {
@@ -18,7 +18,7 @@ export const protectRouteMiddleware = (
 ): [
   Middleware,
   Middleware<{
-    auth?: AccessTokenPayload;
+    auth?: CompleteAccessTokenPayload;
   }>,
 ] => {
   const { allowUnauthorized } = protectOptions;
@@ -49,7 +49,7 @@ export const protectRouteMiddleware = (
         if (!decodedToken) return next();
 
         ctx.state.auth = {
-          ...(decodedToken as AccessTokenPayload), // JWT payload
+          ...(decodedToken as CompleteAccessTokenPayload), // JWT payload
         };
       }
 
@@ -58,6 +58,11 @@ export const protectRouteMiddleware = (
       if (!allowUnauthorized) {
         if (!user) return ctx.throw(401); // staff not found
       }
+
+      ctx.state.auth = {
+        ...ctx.state.auth,
+        user: user as unknown as User,
+      };
 
       // TODO: use fetched staff to set ctx.state.auth
 
