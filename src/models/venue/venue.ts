@@ -73,7 +73,7 @@ const schema = new Schema<VenueAttributes, VenueModel>(
 
 schema.index(
   {
-    momc: 1,
+    mop: 1,
     district: 1,
     region: 1,
   },

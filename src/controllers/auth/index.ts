@@ -6,6 +6,7 @@ import registerRouter from './register';
 import updateRouter from './update';
 import getRouter from './get';
 import meRouter from './me';
+import refreshTokenRouter from './refresh-token';
 import userExistsByEmailRouter from './user-exists-by-email';
 import oAuthLoginRouter from './o-auth-login';
 
@@ -19,6 +20,7 @@ router.use(registerRouter.middleware());
 router.use(updateRouter.middleware());
 router.use(getRouter.middleware());
 router.use(meRouter.middleware());
+router.use(refreshTokenRouter.middleware());
 router.use(userExistsByEmailRouter.middleware());
 router.use(oAuthLoginRouter.middleware());
 
