@@ -135,20 +135,23 @@ router.route({
         },
       ];
 
+      const serviceMatchStages: PipelineStage[] = [];
+
       if (serviceNames?.length) {
-        pipelineStages.push({
+        serviceMatchStages.push({
           $match: {
             'services.name': { $in: serviceNames },
           },
         });
       } else if (serviceType) {
-        pipelineStages.push({
+        serviceMatchStages.push({
           $match: {
             'services.type': serviceType,
           },
         });
       }
 
+      pipelineStages.push(...serviceMatchStages);
       pipelineStages.push({
         $sort: {
           createdAt: -1,
@@ -189,9 +192,48 @@ router.route({
         venue.services = [...new Set(venue.services)];
       });
 
+      // aggregation to get total count
+      const countAggregationStages: PipelineStage[] = [
+        {
+          $match: {
+            ...(region ? { region } : {}),
+            ...(districts ? { district: { $in: districts } } : {}),
+            ...(mops ? { mop: { $in: mops } } : {}),
+          },
+        },
+        {
+          $lookup: {
+            from: 'services',
+            localField: '_id',
+            foreignField: 'venue',
+            as: 'services',
+          },
+        },
+        ...serviceMatchStages,
+        {
+          $count: 'count',
+        },
+        {
+          $project: {
+            count: 1,
+          },
+        },
+      ];
+
+      const [countAggregationResult] = (await Venue.aggregate<any>(
+        countAggregationStages,
+      ).exec()) as ({ count: number } | undefined)[];
+
       ctx.body = {
         success: true,
-        data: aggregationResult,
+        data: {
+          result: aggregationResult,
+          pagination: {
+            page: Number(page) || 1,
+            limit: Number(limit),
+            total: countAggregationResult?.count || 0,
+          },
+        },
       };
     },
   ],
