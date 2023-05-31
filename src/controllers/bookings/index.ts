@@ -1,6 +1,6 @@
 import joiRouter from 'koa-joi-router';
 
-import getAvailableSlotRouter from './get-available-slot';
+import getAvailableSlotRouter from './get-available-slots';
 import createRouter from './create';
 
 const router = joiRouter();

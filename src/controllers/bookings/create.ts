@@ -11,6 +11,8 @@ import { Booking, BookingAttributes } from '@models/booking';
 import { Venue } from '@models/venue';
 import { Staff } from '@models/staff';
 import { Service } from '@models/service';
+import { CompanyAttributes } from '@models/company';
+import { VenueAttributes } from '@models/venue';
 
 const router = joiRouter();
 
@@ -46,7 +48,9 @@ router.route({
       const { venueId, staffId, serviceId, start } = body;
 
       // validate venue exists
-      const venue = await Venue.findById(venueId);
+      const venue = await Venue.findById(venueId).populate<{
+        company: CompanyAttributes;
+      }>('company');
       if (!venue) {
         ctx.throw(400, `Venue with ID "${venueId}" not found.`);
         return;
@@ -90,7 +94,7 @@ router.route({
       const isBookingColliding = isDateBookingCollision({
         date: startDate,
         service,
-        venue,
+        venue: venue as unknown as VenueAttributes,
         bookings,
       });
 
@@ -114,7 +118,12 @@ router.route({
 
       ctx.body = {
         success: true,
-        data: { ...createdBooking.toObject() },
+        data: {
+          ...createdBooking.toObject(),
+          venue: venue.toObject(),
+          staff: staff.toObject(),
+          service: service.toObject(),
+        },
       };
     },
   ],

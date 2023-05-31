@@ -33,7 +33,8 @@ export const validateAccessToken = (
 export const validateRefreshToken = (token: string) => {
   try {
     return validateRefreshTokenOrFail(token);
-  } catch {
+  } catch (error) {
+    console.error(error);
     return undefined;
   }
 };
