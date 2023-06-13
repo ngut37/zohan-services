@@ -43,6 +43,6 @@ export const validateRefreshTokenOrFail = (token: string) => {
   const payload = verify(
     token,
     config.get(CONFIG_KEYS.REFRESH_TOKEN_SECRET),
-  ) as AccessTokenPayload;
+  ) as RefreshTokenPayload;
   return payload;
 };

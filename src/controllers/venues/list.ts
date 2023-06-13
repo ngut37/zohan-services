@@ -1,4 +1,7 @@
 import joiRouter, { Joi } from 'koa-joi-router';
+import { PipelineStage } from 'mongoose';
+
+import { PaginationQuery, paginationQuerySchema } from '@utils/pagination';
 
 import {
   ServiceName,
@@ -7,7 +10,6 @@ import {
   SERVICE_TYPES,
 } from '@models/service';
 import { Venue, VenueAttributes } from '@models/venue';
-import { PipelineStage } from 'mongoose';
 
 type RequestQuery = {
   region?: string;
@@ -15,10 +17,7 @@ type RequestQuery = {
   mops?: string[];
   serviceType?: ServiceType;
   serviceNames?: ServiceName[];
-
-  page: string;
-  limit?: string;
-};
+} & PaginationQuery;
 
 const requestQuerySchema = {
   // location filter
@@ -53,8 +52,7 @@ const requestQuerySchema = {
   }),
 
   // pagination
-  page: Joi.number().integer().min(1).default(1),
-  limit: Joi.number().integer().min(1).max(100).default(10).optional(),
+  ...paginationQuerySchema,
 };
 
 const router = joiRouter();
@@ -226,13 +224,11 @@ router.route({
 
       ctx.body = {
         success: true,
-        data: {
-          result: aggregationResult,
-          pagination: {
-            page: Number(page) || 1,
-            limit: Number(limit),
-            total: countAggregationResult?.count || 0,
-          },
+        data: aggregationResult,
+        pagination: {
+          page: Number(page) || 1,
+          limit: Number(limit),
+          total: countAggregationResult?.count || 0,
         },
       };
     },

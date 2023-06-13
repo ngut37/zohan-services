@@ -84,6 +84,9 @@ schema.index(
   { name: 'get_bookings_and_available_slots' },
 );
 
+// used for listing user's active bookings
+schema.index({ user: 1, start: 1 }, { name: 'list_users_active_bookings' });
+
 export const Booking = mongoose.model<BookingAttributes, BookingModel>(
   'Booking',
   schema,

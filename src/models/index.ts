@@ -6,6 +6,8 @@ import { CONFIG_KEYS } from '@config/keys';
 export const initMongoose = async () => {
   mongoose.set('strictQuery', false);
   mongoose.set('bufferCommands', false);
+  mongoose.set('autoCreate', true);
+  mongoose.set('autoIndex', true);
 
   mongoose.connection.on('error', (err) => {
     console.error(err);

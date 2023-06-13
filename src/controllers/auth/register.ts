@@ -101,13 +101,13 @@ router.route({
       const accessToken = user.generateAccessToken();
       const refreshToken = user.generateRefreshToken();
 
-      ctx.cookies.set('access_token', accessToken, { httpOnly: true });
       ctx.cookies.set('refresh_token', refreshToken, { httpOnly: true });
 
       ctx.status = 201;
 
       ctx.body = {
         success: true,
+        data: { accessToken },
       };
     },
   ],
