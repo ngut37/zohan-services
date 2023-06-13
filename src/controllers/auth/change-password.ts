@@ -3,26 +3,23 @@ import joiRouter, { Joi } from 'koa-joi-router';
 import { User } from '@models/user';
 
 import { AccessTokenPayload, validateRefreshToken } from '@utils/auth';
-import { formatPhoneNumber } from '@utils/phone-number';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
 const router = joiRouter();
 
 type RequestBody = {
-  name?: string;
-  email?: string;
-  phoneNumber?: string;
+  oldPassword: string;
+  newPassword: string;
 };
 
 const requestBodySchema = {
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phoneNumber: Joi.string(),
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().required(),
 };
 
 router.route({
-  path: '/update',
+  path: '/change-password',
   method: 'post',
   validate: {
     body: requestBodySchema,
@@ -31,7 +28,7 @@ router.route({
   handler: [
     protectRouteMiddleware({ allowUnauthorized: false }),
     async (ctx) => {
-      const { phoneNumber, ...modifications } = ctx.request.body as RequestBody;
+      const { oldPassword, newPassword } = ctx.request.body as RequestBody;
       const { id: userId } = ctx.state.auth as AccessTokenPayload;
       const refreshToken = ctx.cookies.get('refresh_token');
 
@@ -49,26 +46,24 @@ router.route({
         return ctx.throw(401, 'Unauthorized.');
       }
 
-      const user = await User.findById(userId, { password: 0 });
+      const user = await User.findOne({
+        _id: userId,
+      });
       if (!user) {
-        return ctx.throw(404, `User not found with ID ${userId}`);
+        return ctx.throw(401, 'User does not exist.');
       }
 
-      if (phoneNumber) {
-        const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
-        user.phoneNumber = formattedPhoneNumber;
+      const isValidPassword = await user.validatePassword(oldPassword);
+      if (!isValidPassword) {
+        return ctx.throw(401, 'Incorrect credentials.');
       }
 
-      user.set(modifications);
+      await user.assignHashSaltPair(newPassword);
 
       await user.save();
 
-      // generate new access token
-      const accessToken = user.generateAccessToken();
-
       ctx.body = {
         success: true,
-        data: { accessToken },
       };
     },
   ],
