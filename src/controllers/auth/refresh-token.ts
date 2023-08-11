@@ -11,7 +11,7 @@ router.route({
   method: 'get',
   handler: [
     protectRouteMiddleware({
-      allowUnauthorized: true,
+      allowUnauthorized: false,
     }),
     async (ctx) => {
       const refreshToken = ctx.cookies.get('refresh_token');

@@ -56,7 +56,7 @@ const schema = new Schema<UserAttributes, UserModel, UserMethods>(
       unique: true,
     },
     phoneNumber: String,
-    password: { type: passwordSchema, required: true, _id: false },
+    password: { type: passwordSchema, _id: false },
     oAuth: {
       userId: String,
       type: { type: String, enum: Object.keys(O_AUTH_TYPES) },

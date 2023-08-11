@@ -7,7 +7,10 @@
     "node": "16.x.x"
   },
   "scripts": {
-    "start": "node -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
+    "start": "node --trace_gc -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
+    "pm2:start": "npx pm2 start npm --name \"zohan_services\" -- start",
+    "pm2:monitor": "npx pm2 monit",
+    "pm2:stop": "npx pm2 delete zohan_services",
     "dev": "nodemon -r tsconfig-paths/register src/app.ts --watch",
     "gcp-build": "tsc --p tsconfig.json",
     "build": "tsc --p tsconfig.json",
