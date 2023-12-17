@@ -4,7 +4,7 @@ import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
 import { Staff } from '../staff';
-import { CompanyRefreshTokenPayload } from '@utils/company-auth';
+import { CompanyRefreshTokenPayload } from '@utils/auth/company-auth';
 
 export function generateRefreshToken(this: Staff) {
   const payload: CompanyRefreshTokenPayload = {

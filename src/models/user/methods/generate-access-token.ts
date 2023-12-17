@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { AccessTokenPayload } from '@utils/auth';
+import { AccessTokenPayload } from '@utils/auth/user-auth';
 
 import { User } from '../user';
 
@@ -13,6 +13,7 @@ export function generateAccessToken(this: User) {
     name: this.name,
     email: this.email,
     phoneNumber: this.phoneNumber,
+    status: this.status,
     oAuth: this.oAuth,
     avatarUrl: this.avatarUrl,
   };

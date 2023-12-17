@@ -34,6 +34,10 @@ router.route({
     type: 'json',
   },
   handler: [
+    /**
+     * Do not user `protectRouteMiddleware` here,
+     * controller contains custom logic for handling.
+     */
     async (ctx) => {
       const body = ctx.request.body as RequestBody;
       const { email, password } = body;
@@ -45,6 +49,11 @@ router.route({
       });
 
       if (!userFoundByEmail) return ctx.throw(401, 'Incorrect credentials.');
+
+      // validate user is of status 'verified'
+      if (userFoundByEmail.status !== 'verified') {
+        return ctx.throw(401, 'User is not verified.');
+      }
 
       const isValidPassword = await userFoundByEmail.validatePassword(password);
 

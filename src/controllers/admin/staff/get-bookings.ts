@@ -3,7 +3,7 @@ import joiRouter, { Joi } from 'koa-joi-router';
 import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
 import { Staff } from '@models/staff';
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 import { Booking } from '@models/booking';
 
 const router = joiRouter();

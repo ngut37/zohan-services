@@ -1,6 +1,6 @@
 import joiRouter, { Joi } from 'koa-joi-router';
 
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
 import { Venue } from '@models/venue';

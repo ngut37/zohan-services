@@ -2,10 +2,8 @@ import { ObjectId } from 'mongodb';
 import joiRouter, { Joi } from 'koa-joi-router';
 import { addMinutes, endOfDay, startOfDay } from 'date-fns';
 
-import { AccessTokenPayload } from '@utils/auth';
+import { AccessTokenPayload } from '@utils/auth/user-auth';
 import { isDateBookingCollision } from '@utils/bookings/is-date-booking-collision';
-
-import { protectRouteMiddleware } from '@middlewares/protect';
 
 import { Booking, BookingAttributes } from '@models/booking';
 import { Venue } from '@models/venue';
@@ -38,9 +36,6 @@ router.route({
     type: 'json',
   },
   handler: [
-    protectRouteMiddleware({
-      allowUnauthorized: false,
-    }),
     async (ctx) => {
       const { id: userId } = ctx.state.auth as AccessTokenPayload;
 

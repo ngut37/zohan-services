@@ -52,6 +52,11 @@ router.route({
         sameSite: 'none',
         secure: productionEnvironment,
       });
+      ctx.cookies.set('access_token', accessToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: productionEnvironment,
+      });
 
       ctx.body = { success: true, data: { accessToken } };
     },

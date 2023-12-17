@@ -2,7 +2,7 @@ import joiRouter from 'koa-joi-router';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
-import { AccessTokenPayload } from '@utils/auth';
+import { AccessTokenPayload } from '@utils/auth/user-auth';
 
 import { Venue } from '@models/venue';
 import { Booking } from '@models/booking';

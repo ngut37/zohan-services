@@ -3,14 +3,16 @@ import jwtMiddleware from 'koa-jwt';
 
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
+
 import { Role } from '@models/shared/roles';
+import { Staff } from '@models/staff';
+import { Company } from '@models/company';
+
 import {
   CompleteCompanyAccessTokenPayload,
   extendAuth,
   validateCompanyAccessToken,
-} from '@utils/company-auth';
-import { Staff } from '@models/staff';
-import { Company } from '@models/company';
+} from '@utils/auth/company-auth';
 import { assertNonNullish } from '@utils/assert-non-nullish';
 
 export type ProtectRouteMiddlewareOptions = {

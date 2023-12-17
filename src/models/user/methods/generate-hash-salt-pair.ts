@@ -13,5 +13,6 @@ export async function assignHashSaltPair(
     this.password = { hash: hashedPassword, salt };
   } catch (error) {
     console.error(error);
+    throw new Error('Failed to assign hash and salt pair.');
   }
 }
