@@ -6,7 +6,7 @@ import { Venue } from '@models/venue';
 import { Region } from '@models/region';
 import { District } from '@models/district';
 
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 import { Momc } from '@models/momc';
 
 const router = joiRouter();

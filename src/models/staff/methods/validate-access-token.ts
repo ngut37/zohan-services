@@ -1,4 +1,4 @@
-import { validateCompanyAccessToken } from '@utils/company-auth';
+import { validateCompanyAccessToken } from '@utils/auth/company-auth';
 
 import { Staff } from '../staff';
 

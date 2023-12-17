@@ -2,7 +2,7 @@ import joiRouter from 'koa-joi-router';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
-import { AccessTokenPayload } from '@utils/auth';
+import { AccessTokenPayload } from '@utils/auth/user-auth';
 import { PaginationQuery, paginationQuerySchema } from '@utils/pagination';
 
 import { Venue } from '@models/venue';

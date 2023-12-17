@@ -4,7 +4,7 @@ import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
 import { Staff } from '@models/staff';
 
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 
 const router = joiRouter();
 

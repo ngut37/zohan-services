@@ -1,9 +1,13 @@
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { generateEmailRegex } from '@utils/email';
+import * as mailer from '@utils/mailer';
 
 import { User } from '@models/user';
 import { OAuthType, O_AUTH_TYPES } from '@models/user/types';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 import { formatPhoneNumber } from '@utils/phone-number';
 
@@ -87,27 +91,36 @@ router.route({
       if (oAuth) {
         const { userId, type } = oAuth;
         user.oAuth = { userId, type };
+        user.status = 'verified';
         await user.save();
+
         return;
       } else if (password) {
+        // sanity check
+        user.status = 'not_verified';
         await user.assignHashSaltPair(password);
+
+        const userEmailVerificationToken =
+          user.generateEmailVerificationToken();
+
+        try {
+          await mailer.sendVerificationEmailForCustomer({
+            to: user.email,
+            verificationLink: `${config.get(
+              CONFIG_KEYS.APP_URL,
+            )}/auth/verify-email?token=${userEmailVerificationToken}`,
+          });
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         ctx.throw(400);
       }
 
       await user.save();
 
-      // generate JWT access-refresh pair
-      const accessToken = user.generateAccessToken();
-      const refreshToken = user.generateRefreshToken();
-
-      ctx.cookies.set('refresh_token', refreshToken, { httpOnly: true });
-
-      ctx.status = 201;
-
       ctx.body = {
         success: true,
-        data: { accessToken },
       };
     },
   ],

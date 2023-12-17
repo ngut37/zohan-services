@@ -12,8 +12,9 @@ import { generateAccessToken } from './methods/generate-access-token';
 import { validateUserAccessToken } from './methods/validate-access-token';
 import { generateRefreshToken } from './methods/generate-refresh-token';
 import { validateUserRefreshToken } from './methods/validate-refresh-token';
+import { generateEmailValidationToken } from './methods/generate-email-validation-token';
 
-import { OAuthType, O_AUTH_TYPES } from './types';
+import { OAuthType, O_AUTH_TYPES, UserStatus, USER_STATUS } from './types';
 
 export type UserMethods = {
   /**
@@ -25,6 +26,7 @@ export type UserMethods = {
   validateUserAccessToken: typeof validateUserAccessToken;
   generateRefreshToken: typeof generateRefreshToken;
   validateRefreshToken: typeof validateUserRefreshToken;
+  generateEmailVerificationToken: typeof generateEmailValidationToken;
 };
 
 export type UserAttributes = {
@@ -33,6 +35,7 @@ export type UserAttributes = {
   email: string;
   phoneNumber: string;
   password: Password;
+  status: UserStatus;
   oAuth?: {
     userId: string;
     type: OAuthType;
@@ -57,6 +60,11 @@ const schema = new Schema<UserAttributes, UserModel, UserMethods>(
     },
     phoneNumber: String,
     password: { type: passwordSchema, _id: false },
+    status: {
+      type: String,
+      enum: Object.keys(USER_STATUS),
+      default: USER_STATUS.not_verified,
+    },
     oAuth: {
       userId: String,
       type: { type: String, enum: Object.keys(O_AUTH_TYPES) },
@@ -76,6 +84,7 @@ schema.method('generateAccessToken', generateAccessToken);
 schema.method('validateUserAccessToken', validateUserAccessToken);
 schema.method('generateRefreshToken', generateRefreshToken);
 schema.method('validateRefreshToken', validateUserRefreshToken);
+schema.method('generateEmailVerificationToken', generateEmailValidationToken);
 
 export const User = mongoose.model<UserAttributes, UserModel>(
   'User',

@@ -1,4 +1,4 @@
-import { validateCompanyRefreshToken } from '@utils/company-auth';
+import { validateCompanyRefreshToken } from '@utils/auth/company-auth';
 
 import { Staff } from '../staff';
 

@@ -1,4 +1,4 @@
-import { validateRefreshToken } from '@utils/auth';
+import { validateRefreshToken } from '@utils/auth/user-auth';
 
 import { User } from '../user';
 

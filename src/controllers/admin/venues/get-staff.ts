@@ -2,7 +2,7 @@ import joiRouter from 'koa-joi-router';
 
 import { adminProtectRouteMiddleware } from '@middlewares/admin-protect';
 
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 
 import { Staff } from '@models/staff';
 

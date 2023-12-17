@@ -1,6 +1,9 @@
 import joiRouter from 'koa-joi-router';
 
-import { CompleteAccessTokenPayload, validateRefreshToken } from '@utils/auth';
+import {
+  CompleteAccessTokenPayload,
+  validateRefreshToken,
+} from '@utils/auth/user-auth';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 

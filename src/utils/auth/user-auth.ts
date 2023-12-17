@@ -9,7 +9,7 @@ export type RefreshTokenPayload = Pick<User, 'id'>;
 
 export type AccessTokenPayload = Pick<
   User,
-  'id' | 'name' | 'email' | 'phoneNumber' | 'oAuth' | 'avatarUrl'
+  'id' | 'name' | 'email' | 'phoneNumber' | 'status' | 'oAuth' | 'avatarUrl'
 >;
 
 export type CompleteAccessTokenPayload = AccessTokenPayload & { user: User };

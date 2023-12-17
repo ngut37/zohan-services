@@ -2,7 +2,10 @@ import joiRouter from 'koa-joi-router';
 
 import { ObjectId } from 'mongodb';
 
-import { validateAccessToken, validateRefreshToken } from '@utils/auth';
+import {
+  validateAccessToken,
+  validateRefreshToken,
+} from '@utils/auth/user-auth';
 
 import { User } from '@models/user';
 

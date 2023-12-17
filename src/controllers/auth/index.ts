@@ -10,6 +10,7 @@ import refreshTokenRouter from './refresh-token';
 import userExistsByEmailRouter from './user-exists-by-email';
 import oAuthLoginRouter from './o-auth-login';
 import updatePasswordRouter from './change-password';
+import verifyEmailRouter from './verify-email';
 
 const router = joiRouter();
 
@@ -25,5 +26,6 @@ router.use(refreshTokenRouter.middleware());
 router.use(userExistsByEmailRouter.middleware());
 router.use(oAuthLoginRouter.middleware());
 router.use(updatePasswordRouter.middleware());
+router.use(verifyEmailRouter.middleware());
 
 export default router;

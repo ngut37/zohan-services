@@ -1,4 +1,4 @@
-import { validateAccessToken } from '@utils/auth';
+import { validateAccessToken } from '@utils/auth/user-auth';
 
 import { User } from '../user';
 

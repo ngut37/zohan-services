@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
 
-import { RefreshTokenPayload } from '@utils/auth';
+import { RefreshTokenPayload } from '@utils/auth/user-auth';
 
 import { User } from '../user';
 

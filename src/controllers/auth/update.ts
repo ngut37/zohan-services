@@ -2,7 +2,10 @@ import joiRouter, { Joi } from 'koa-joi-router';
 
 import { User } from '@models/user';
 
-import { AccessTokenPayload, validateRefreshToken } from '@utils/auth';
+import {
+  AccessTokenPayload,
+  validateRefreshToken,
+} from '@utils/auth/user-auth';
 import { formatPhoneNumber } from '@utils/phone-number';
 
 import { protectRouteMiddleware } from '@middlewares/protect';

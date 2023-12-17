@@ -6,7 +6,7 @@ import { CONFIG_KEYS } from '@config/keys';
 
 import { Company } from '@models/company';
 
-import { CompanyAccessTokenPayload } from '@utils/company-auth';
+import { CompanyAccessTokenPayload } from '@utils/auth/company-auth';
 
 import { Staff } from '../staff';
 
