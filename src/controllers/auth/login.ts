@@ -52,7 +52,7 @@ router.route({
 
       // validate user is of status 'verified'
       if (userFoundByEmail.status !== 'verified') {
-        return ctx.throw(401, 'User is not verified.');
+        return ctx.throw(403, 'User is not verified.');
       }
 
       const isValidPassword = await userFoundByEmail.validatePassword(password);

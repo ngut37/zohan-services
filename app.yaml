@@ -1,4 +1,4 @@
-runtime: nodejs16
+runtime: nodejs20
 
 env_variables:
   APP_ENV: production
@@ -14,6 +14,8 @@ env_variables:
   ADMIN_REFRESH_TOKEN_SECRET: {secret:ADMIN_REFRESH_TOKEN_SECRET}
   ADMIN_ACCESS_TOKEN_EXPIRATION_DURATION: '15m'
   ADMIN_REFRESH_EXPIRATION_DURATION: '180d'
+  GMAIL_EMAIL: {secret:GMAIL_EMAIL}
+  GMAIL_APP_PASSWORD: {secret:GMAIL_APP_PASSWORD}
 
 automatic_scaling:
   target_cpu_utilization: 0.8

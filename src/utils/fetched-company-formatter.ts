@@ -1,95 +1,91 @@
 import { RawCompany } from '@models/company';
 
-export type ParsedRawCompany = {
-  '?xml': string;
-  'are:Ares_odpovedi': {
-    'are:Odpoved': {
-      'are:Pocet_zaznamu': number;
-      'are:Typ_vyhledani': string;
-      'are:Zaznam'?: {
-        'are:Shoda_ICO': {
-          'dtt:Kod': number;
-        };
-        'are:Vyhledano_dle': string;
-        'are:Typ_registru': {
-          'dtt:Kod': number;
-          'dtt:Text': string;
-        };
-        'are:Datum_vzniku': string;
-        'are:Datum_platnosti': string;
-        'are:Pravni_forma': {
-          'dtt:Kod_PF': number;
-        };
-        'are:Obchodni_firma': string;
-        'are:ICO': number;
-        'are:Identifikace': {
-          'are:Adresa_ARES': {
-            'dtt:ID_adresy': number;
-            'dtt:Kod_statu': number;
-            'dtt:Nazev_okresu': string;
-            'dtt:Nazev_obce': string;
-            'dtt:Nazev_casti_obce': string;
-            'dtt:Nazev_mestske_casti': string;
-            'dtt:Nazev_ulice': string;
-            'dtt:Cislo_domovni': number;
-            'dtt:Typ_cislo_domovni': number;
-            'dtt:Cislo_orientacni': number;
-            'dtt:PSC': number;
-            'dtt:Adresa_UIR': {
-              'udt:Kod_oblasti': number;
-              'udt:Kod_kraje': number;
-              'udt:Kod_okresu': number;
-              'udt:Kod_obce': number;
-              'udt:Kod_pobvod': number; // district of Prague only
-              'udt:Kod_nobvod': number;
-              'udt:Kod_casti_obce': number;
-              'udt:Kod_mestske_casti': number;
-              'udt:PSC': number;
-              'udt:Kod_ulice': number;
-              'udt:Cislo_domovni': number;
-              'udt:Typ_cislo_domovni': number;
-              'udt:Cislo_orientacni': number;
-              'udt:Kod_adresy': number;
-              'udt:Kod_objektu': number;
-            };
-          };
-        };
-        'are:Kod_FU': number;
-        'are:Priznaky_subjektu': string;
-      };
-    };
-  };
-};
+export interface CompanyData {
+  ico: string;
+  obchodniJmeno: string;
+  sidlo: Address;
+  pravniForma: string;
+  financniUrad: string;
+  datumVzniku: string;
+  datumAktualizace: string;
+  dic: string;
+  icoId: string;
+  adresaDorucovaci: DeliveryAddress;
+  seznamRegistraci: RegistrationsStatus;
+  primarniZdroj: string;
+  czNace: string[];
+}
+
+interface Address {
+  kodStatu: string;
+  nazevStatu: string;
+  kodKraje: number;
+  nazevKraje: string;
+  kodOkresu: number;
+  kodObce: number;
+  nazevObce: string;
+  kodMestskehoObvodu: number;
+  nazevMestskehoObvodu: string;
+  kodMestskeCastiObvodu: number;
+  kodUlice: number;
+  nazevMestskeCastiObvodu: string;
+  nazevUlice: string;
+  cisloDomovni: number;
+  kodCastiObce: number;
+  cisloOrientacni: number;
+  nazevCastiObce: string;
+  kodAdresnihoMista: number;
+  psc: number;
+  textovaAdresa: string;
+  typCisloDomovni: string;
+  standardizaceAdresy: boolean;
+}
+
+interface DeliveryAddress {
+  radekAdresy1: string;
+  radekAdresy2: string;
+  radekAdresy3: string;
+}
+
+interface RegistrationsStatus {
+  stavZdrojeVr: string;
+  stavZdrojeRes: string;
+  stavZdrojeRzp: string;
+  stavZdrojeNrpzs: string;
+  stavZdrojeRpsh: string;
+  stavZdrojeRcns: string;
+  stavZdrojeSzr: string;
+  stavZdrojeDph: string;
+  stavZdrojeSd: string;
+  stavZdrojeIr: string;
+  stavZdrojeCeu: string;
+  stavZdrojeRs: string;
+  stavZdrojeRed: string;
+}
 
 export const formatFetchedCompany = (
-  rawJsonCompany: ParsedRawCompany,
+  companyData: CompanyData,
 ): RawCompany | undefined => {
-  if (rawJsonCompany['are:Ares_odpovedi']['are:Odpoved']['are:Zaznam']) {
-    const record =
-      rawJsonCompany['are:Ares_odpovedi']['are:Odpoved']['are:Zaznam'];
+  if (companyData.ico) {
+    const ico = companyData.ico;
 
-    const ico = record['are:ICO'];
-
-    const name = record['are:Obchodni_firma'];
-
-    const { 'dtt:Nazev_ulice': street, 'dtt:Adresa_UIR': ruianIds } =
-      record['are:Identifikace']['are:Adresa_ARES'];
+    const name = companyData.obchodniJmeno;
 
     const {
-      'udt:Kod_kraje': regionId,
-      'udt:Kod_okresu': districtId,
-      'udt:Kod_obce': _municipalityId,
-      'udt:Kod_casti_obce': _municipalityPartId,
-      'udt:Kod_mestske_casti': momcId,
-      'udt:Kod_pobvod': mopId,
-      'udt:PSC': _zipCode,
-      'udt:Kod_ulice': _streetId,
-      'udt:Cislo_domovni': houseNumber,
-      'udt:Typ_cislo_domovni': _houseNumberType,
-      'udt:Cislo_orientacni': streetNumber,
-      'udt:Kod_adresy': _addressId,
-      'udt:Kod_objektu': _buildingId,
-    } = ruianIds;
+      kodKraje: regionId,
+      kodOkresu: districtId,
+      kodObce: _municipalityId,
+      kodCastiObce: _municipalityPartId,
+      kodMestskeCastiObvodu: momcId,
+      kodMestskehoObvodu: mopId,
+      kodUlice: _streetId,
+      psc: _zipCode,
+      cisloDomovni: houseNumber,
+      typCisloDomovni: _houseNumberType,
+      cisloOrientacni: streetNumber,
+      kodAdresnihoMista: _addressId,
+      nazevUlice: street,
+    } = companyData.sidlo;
 
     const stringAddress = `${street} ${houseNumber}${
       streetNumber ? `/${streetNumber}` : ''

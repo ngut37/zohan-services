@@ -1,13 +1,11 @@
 import axios from 'axios';
 import joiRouter, { Joi } from 'koa-joi-router';
 
-import { XMLParser } from 'fast-xml-parser';
-
 import { Company } from '@models/company';
 
 import {
+  CompanyData,
   formatFetchedCompany,
-  ParsedRawCompany,
 } from '@utils/fetched-company-formatter';
 import { mapCompanyToFormData } from './utils';
 
@@ -47,27 +45,23 @@ router.route({
       });
     }
 
-    // fetch company, parse XML data and return it as company form data
-    const fetchResult = await axios.get(
-      `https://wwwinfo.mfcr.cz/cgi-bin/ares/darv_std.cgi?ico=${ico}`,
-    );
+    try {
+      // fetch company and return it as company form data
+      const fetchResult = await axios.get<CompanyData>(
+        `https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/${ico}`,
+      );
 
-    const parser = new XMLParser();
+      const formattedResult = formatFetchedCompany(fetchResult.data);
 
-    const parsedResult = parser.parse(fetchResult.data) as ParsedRawCompany;
+      const fetchedCompany = new Company({ ...formattedResult, ico });
 
-    const formattedResult = formatFetchedCompany(parsedResult);
-
-    if (!formattedResult) {
+      ctx.body = {
+        success: true,
+        data: await mapCompanyToFormData(fetchedCompany),
+      };
+    } catch (error) {
       return ctx.throw(404, 'Company with given ICO not found.');
     }
-
-    const fetchedCompany = new Company({ ...formattedResult, ico });
-
-    ctx.body = {
-      success: true,
-      data: await mapCompanyToFormData(fetchedCompany),
-    };
   },
 });
 

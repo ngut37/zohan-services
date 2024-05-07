@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "engines": {
-    "node": "16.x.x"
+    "node": "20.x.x"
   },
   "scripts": {
     "start": "node --trace_gc -r tsconfig-paths/register -r ts-node/register/transpile-only build/app.js",
