@@ -1,12 +1,17 @@
 import joiRouter, { Joi } from 'koa-joi-router';
 
-import { User } from '@models/user';
+import { User, USER_STATUS } from '@models/user';
 
 import {
   AccessTokenPayload,
   validateRefreshToken,
 } from '@utils/auth/user-auth';
 import { formatPhoneNumber } from '@utils/phone-number';
+import * as mailer from '@utils/mailer';
+import { generateEmailRegex } from '@utils/email';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
@@ -34,7 +39,8 @@ router.route({
   handler: [
     protectRouteMiddleware({ allowUnauthorized: false }),
     async (ctx) => {
-      const { phoneNumber, ...modifications } = ctx.request.body as RequestBody;
+      const { phoneNumber, email, ...modifications } = ctx.request
+        .body as RequestBody;
       const { id: userId } = ctx.state.auth as AccessTokenPayload;
       const refreshToken = ctx.cookies.get('refresh_token');
 
@@ -60,6 +66,37 @@ router.route({
       if (phoneNumber) {
         const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
         user.phoneNumber = formattedPhoneNumber;
+      }
+
+      if (email && user.email !== email) {
+        const emailRegex = generateEmailRegex(email);
+
+        const userExists = await User.exists({ email: { $regex: emailRegex } });
+
+        if (userExists) {
+          return ctx.throw(409, 'This email has already been used.');
+        }
+
+        user.set({ email, status: USER_STATUS.not_verified });
+        await user.save();
+
+        const userEmailVerificationToken =
+          user.generateEmailVerificationToken();
+
+        await mailer.sendVerificationEmailForCustomer({
+          to: user.email,
+          verificationLink: `${config.get(
+            CONFIG_KEYS.APP_URL,
+          )}/auth/verify-email?token=${userEmailVerificationToken}`,
+        });
+
+        ctx.cookies.set('refresh_token', '', { httpOnly: true });
+
+        ctx.body = {
+          success: true,
+          data: { accessToken: null },
+        };
+        return;
       }
 
       user.set(modifications);
