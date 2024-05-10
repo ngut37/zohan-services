@@ -24,22 +24,42 @@ import { Momc } from '@models/momc';
 
     const artifactsDirectory = '/artifacts';
     const artifactsDirectoryPath = createDirectoryInCwd(artifactsDirectory);
+
+    const cadastralDataDirectory = '/cadastral-data';
+    const cadastralDataDirectoryPath = createDirectoryInCwd(
+      cadastralDataDirectory,
+    );
+
     // keep 2022-06-30 because in July 2022 Prague district becomes hidden
-    const fileDateString = '2023-04-30';
+    const fileDateString = '2022-06-30';
     const fileDate = new Date(fileDateString);
 
-    const targetFilePath = artifactsDirectoryPath + `/${fileDateString}.zip`;
+    let targetFilePath = cadastralDataDirectoryPath + `/${fileDateString}.zip`;
 
     try {
       fs.readFileSync(targetFilePath);
-      console.log('File exists, skip downloading...');
+      console.log('File exists (from repository), skip downloading...');
     } catch (error) {
-      // file does not exist
-      console.log(
-        `${targetFilePath} file does not exist, downloading CUZK file...`,
-      );
-      console.log(cuzkUrlBuilder(fileDate));
-      await downloadFile(cuzkUrlBuilder(fileDate), targetFilePath);
+      targetFilePath = artifactsDirectoryPath + `/${fileDateString}.zip`;
+      try {
+        fs.readFileSync(targetFilePath);
+        console.log('File exists (from artifacts), skip downloading...');
+      } catch (error) {
+        // file does not exist
+        console.log(
+          `${targetFilePath} file does not exist, downloading CUZK file...`,
+        );
+        console.log(cuzkUrlBuilder(fileDate));
+
+        try {
+          await downloadFile(cuzkUrlBuilder(fileDate), targetFilePath);
+        } catch (error) {
+          console.error(
+            'File access has expired and the file is no longer reachable.',
+          );
+          process.exit(0);
+        }
+      }
     }
 
     console.log('Unzipping file...');

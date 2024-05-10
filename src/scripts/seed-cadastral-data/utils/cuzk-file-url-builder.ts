@@ -53,7 +53,7 @@ export const cuzkUrlBuilder = (
   // Probably use moment.js for this case
   // to set the moment to last day of the given  month
   // and to easily get formatted date in YYYYMMDD format
-  const month = date.getMonth() === 0 ? 12 : date.getMonth();
+  const month = date.getMonth() === 0 ? 12 : date.getUTCMonth() + 1;
   const year = month === 12 ? date.getFullYear() - 1 : date.getFullYear();
   const daysInMonth = daysOfMonthsMap[month as keyof typeof daysOfMonthsMap];
 
