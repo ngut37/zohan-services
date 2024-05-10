@@ -28,7 +28,7 @@ router.route({
 
       // get user's bookings that are in future
       const bookings = await Booking.find({
-        user: userId,
+        existingCustomer: userId,
         start: {
           $gte: now,
         },

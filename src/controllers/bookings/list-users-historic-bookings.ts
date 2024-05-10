@@ -41,7 +41,7 @@ router.route({
 
       // get user's bookings that are in past
       const bookings = await Booking.find({
-        user: userId,
+        existingCustomer: userId,
         start: {
           $lt: now,
         },
@@ -61,7 +61,7 @@ router.route({
         ]);
 
       const count = await Booking.countDocuments({
-        user: userId,
+        existingCustomer: userId,
         start: {
           $lt: now,
         },
