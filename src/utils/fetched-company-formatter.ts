@@ -85,9 +85,10 @@ export const formatFetchedCompany = (
       cisloOrientacni: streetNumber,
       kodAdresnihoMista: _addressId,
       nazevUlice: street,
+      nazevCastiObce: municipalityPart,
     } = companyData.sidlo;
 
-    const stringAddress = `${street} ${houseNumber}${
+    const stringAddress = `${street || municipalityPart} ${houseNumber}${
       streetNumber ? `/${streetNumber}` : ''
     }`;
 

@@ -38,7 +38,7 @@ const requestBodySchema = {
 
   regionString: Joi.string().required(),
   districtString: Joi.string().required(),
-  quarterString: Joi.string(), // momc
+  quarterString: Joi.string().allow(''), // momc
   coordinates: Joi.array().items(Joi.number()).length(2),
 
   staffName: Joi.string().required(),

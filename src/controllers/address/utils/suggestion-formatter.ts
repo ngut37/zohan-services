@@ -7,6 +7,7 @@ export const formatSuggestion = (
 
   const {
     userData: {
+      municipality,
       street,
       streetNumber,
       houseNumber,
@@ -18,7 +19,7 @@ export const formatSuggestion = (
     },
   } = rawSuggestion;
 
-  const stringAddress = `${street} ${houseNumber}${
+  const stringAddress = `${street || municipality} ${houseNumber}${
     houseNumber && streetNumber ? '/' : ''
   }${streetNumber}`;
   return {
