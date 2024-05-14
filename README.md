@@ -23,6 +23,7 @@ $ yarn
 - `PORT` - (integer) port number for the app to listen on
 #### Database
 - `MONGO_URL` - (MongoDB URI) URI of the database the app will be accessing
+- `DATE_FNZ_TIMEZONE` - (string) timezone for getting available booking slots
 #### JWT tokens
 - `ACCESS_TOKEN_SECRET` - (string) secret for generating and validating access tokens
 - `REFRESH_TOKEN_SECRET` - (string) secret for generating and validating refresh tokens

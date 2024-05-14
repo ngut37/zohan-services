@@ -111,7 +111,7 @@ router.route({
             )}/auth/verify-email?token=${userEmailVerificationToken}`,
           });
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       } else {
         ctx.throw(400);

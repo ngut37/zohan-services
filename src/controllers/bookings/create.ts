@@ -92,7 +92,7 @@ router.route({
       }).lean();
 
       const isBookingColliding = isDateBookingCollision({
-        date: startDate,
+        zonedTime: startDate,
         service,
         venue: venue as unknown as VenueAttributes,
         bookings,

@@ -1,4 +1,8 @@
 import joiRouter, { Joi } from 'koa-joi-router';
+import { toZonedTime } from 'date-fns-tz';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
@@ -61,9 +65,13 @@ router.route({
         return ctx.throw(404, 'Staff not found');
       }
 
-      const dayDate = new Date(day);
-      const start = startOfDay(dayDate);
-      const end = endOfDay(dayDate);
+      const zonedTime = toZonedTime(
+        day,
+        config.get(CONFIG_KEYS.DATE_FNZ_TIMEZONE),
+      );
+
+      const start = startOfDay(zonedTime);
+      const end = endOfDay(zonedTime);
 
       const bookings = await Booking.find({
         venue: venueId,
@@ -73,8 +81,8 @@ router.route({
       });
 
       const availableBookingSlots = getAvailableSlots({
-        date: dayDate,
-        service: service,
+        zonedTime,
+        service,
         venue,
         bookings,
       });

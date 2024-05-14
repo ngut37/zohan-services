@@ -8,6 +8,8 @@ type FullConfig = {
   MONGO_URL: string;
   TESTING_EMAIL: string;
 
+  DATE_FNZ_TIMEZONE: string;
+
   ACCESS_TOKEN_SECRET: string;
   REFRESH_TOKEN_SECRET: string;
   RESET_TOKEN_SECRET: string;

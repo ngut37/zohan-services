@@ -1,4 +1,8 @@
 import { addMinutes, differenceInMinutes, getDay, setHours } from 'date-fns';
+import { fromZonedTime } from 'date-fns-tz';
+
+import { config } from '@config/config';
+import { CONFIG_KEYS } from '@config/keys';
 
 import { getDayName } from '@utils/date/map-day-index-to-day';
 import {
@@ -12,40 +16,50 @@ import { BusinessHoursInterval, VenueAttributes } from '@models/venue';
 import { BookingAttributes } from '@models/booking';
 
 export const isDateBookingCollision = ({
-  date,
+  zonedTime,
   service,
   venue,
   bookings,
 }: {
-  date: Date;
+  zonedTime: Date;
   service: ServiceAttributes;
   venue: VenueAttributes;
   bookings: BookingAttributes[];
 }): boolean => {
-  const dayName = getDayName(getDay(date));
+  const dayName = getDayName(getDay(zonedTime));
 
-  if (!venue.businessHours[dayName]) return true;
+  if (!venue.businessHours[dayName]) {
+    return true;
+  }
 
   const serviceLength = service.length;
 
-  const openingDateTime = new Date(
-    setHours(
-      date,
-      (venue.businessHours[dayName] as BusinessHoursInterval).openingTime.hour,
-    ).setMinutes(
-      (venue.businessHours[dayName] as BusinessHoursInterval).openingTime
-        .minute,
+  const openingDateTime = fromZonedTime(
+    new Date(
+      setHours(
+        zonedTime,
+        (venue.businessHours[dayName] as BusinessHoursInterval).openingTime
+          .hour,
+      ).setMinutes(
+        (venue.businessHours[dayName] as BusinessHoursInterval).openingTime
+          .minute,
+      ),
     ),
+    config.get(CONFIG_KEYS.DATE_FNZ_TIMEZONE),
   );
 
-  const closingDateTime = new Date(
-    setHours(
-      date,
-      (venue.businessHours[dayName] as BusinessHoursInterval).closingTime.hour,
-    ).setMinutes(
-      (venue.businessHours[dayName] as BusinessHoursInterval).closingTime
-        .minute,
+  const closingDateTime = fromZonedTime(
+    new Date(
+      setHours(
+        zonedTime,
+        (venue.businessHours[dayName] as BusinessHoursInterval).closingTime
+          .hour,
+      ).setMinutes(
+        (venue.businessHours[dayName] as BusinessHoursInterval).closingTime
+          .minute,
+      ),
     ),
+    config.get(CONFIG_KEYS.DATE_FNZ_TIMEZONE),
   );
 
   const businessOpeningTimeInMinutes = differenceInMinutes(
@@ -62,10 +76,10 @@ export const isDateBookingCollision = ({
     -serviceLength,
   );
 
-  const dateIsBeforeOpeningTime = looseIsDateBefore(date, openingDateTime);
+  const dateIsBeforeOpeningTime = looseIsDateBefore(zonedTime, openingDateTime);
 
   const dateIsAfterClosingTimeWithBookingLength = looseIsDateAfter(
-    date,
+    zonedTime,
     closingDateTimeWithBookingLength,
   );
 
@@ -82,15 +96,24 @@ export const isDateBookingCollision = ({
     const bookingStartDateTime = new Date(booking.start);
     const bookingEndDateTime = new Date(booking.end);
 
-    const dateIsAfterBooking = looseIsDateAfter(date, bookingStartDateTime);
-    const dateIsEqualBooking = looseIsDateEqual(date, bookingStartDateTime);
-    const dateIsBeforeBooking = looseIsDateBefore(date, bookingEndDateTime);
+    const dateIsAfterBooking = looseIsDateAfter(
+      zonedTime,
+      bookingStartDateTime,
+    );
+    const dateIsEqualBooking = looseIsDateEqual(
+      zonedTime,
+      bookingStartDateTime,
+    );
+    const dateIsBeforeBooking = looseIsDateBefore(
+      zonedTime,
+      bookingEndDateTime,
+    );
 
     if ((dateIsAfterBooking || dateIsEqualBooking) && dateIsBeforeBooking) {
       return true;
     }
 
-    const dateWithServiceLength = addMinutes(date, serviceLength);
+    const dateWithServiceLength = addMinutes(zonedTime, serviceLength);
 
     const dateIsEqualBookingWithServiceLength = looseIsDateEqual(
       dateWithServiceLength,

@@ -24,6 +24,8 @@ const defaultConfig = Object.freeze<Config>({
   PORT: Number(process.env.PORT),
   APP_URL: process.env.APP_URL,
 
+  DATE_FNZ_TIMEZONE: process.env.DATE_FNZ_TIMEZONE || 'Europe/Prague',
+
   // Token secrets
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,

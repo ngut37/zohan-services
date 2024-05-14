@@ -10,6 +10,8 @@ export const CONFIG_KEYS = enumerate<ConfigKeys>([
   'MONGO_URL',
   'TESTING_EMAIL',
 
+  'DATE_FNZ_TIMEZONE',
+
   'ACCESS_TOKEN_SECRET',
   'REFRESH_TOKEN_SECRET',
   'RESET_TOKEN_SECRET',
