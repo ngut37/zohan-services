@@ -37,7 +37,7 @@ const getHtmlTemplate = (htmlBodyContent: string) => {
             a {
                 padding: 10px 20px;
                 border-radius: 5px;
-                color: #fff;
+                color: #0000ff;
                 text-decoration: none;
             }
           </style>
