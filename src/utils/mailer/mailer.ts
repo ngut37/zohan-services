@@ -1,7 +1,9 @@
 import { createTransport, SendMailOptions } from 'nodemailer';
+import { toZonedTime } from 'date-fns-tz';
 
 import { config } from '@config/config';
 import { CONFIG_KEYS } from '@config/keys';
+import { format } from 'date-fns';
 
 const getGetTransporter = () => {
   return createTransport({
@@ -121,4 +123,51 @@ export const sendVerificationEmailForCustomer = async ({
   `;
 
   await sendEmail({ to, htmlBodyContent, subject: 'Aktivace účtu' });
+};
+
+export const sendBookingConfirmationEmail = async ({
+  to,
+  bookingDetails,
+}: {
+  to: string;
+  bookingDetails: {
+    venueName: string;
+    venueStringAddress: string;
+    serviceName: string;
+    staffName: string;
+    start: Date;
+    end: Date;
+  };
+}) => {
+  const startToZonedTime = toZonedTime(
+    bookingDetails.start,
+    config.get(CONFIG_KEYS.DATE_FNZ_TIMEZONE),
+  );
+  const endToZonedTime = toZonedTime(
+    bookingDetails.end,
+    config.get(CONFIG_KEYS.DATE_FNZ_TIMEZONE),
+  );
+
+  const formattedStartDate = format(startToZonedTime, 'dd.MM.yyyy HH:mm');
+  const formattedEndDate = format(endToZonedTime, 'dd.MM.yyyy HH:mm');
+
+  const htmlBodyContent = `
+    <h2>Potvrzení rezervace 🎉</h2>
+    <p>Dobrý den,</p>
+    <p>Váš termín byl úspěšně zarezervován. Níže naleznete detaily rezervace:</p>
+    <hr/>
+    <ul>
+      <li><b>Služba:</b> ${bookingDetails.serviceName}</li>
+      <li><b>Personál:</b> ${bookingDetails.staffName}</li>
+      <li><b>Adresa:</b> ${bookingDetails.venueStringAddress}</li>
+      <li><b>Začátek:</b> ${formattedStartDate}</li>
+      <li><b>Konec:</b> ${formattedEndDate}</li>
+    </ul>
+    <hr/>
+    <p>Pokud jste si rezervaci nezadali, kontaktujte prosím naši podporu.</p>
+    <p>S pozdravem,</p>
+    <p>Tým Zohan 👋</p>  
+  `;
+
+  await sendEmail({ to, htmlBodyContent, subject: 'Potvrzení rezervace' });
 };

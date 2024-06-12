@@ -4,15 +4,19 @@ import { addMinutes, endOfDay, startOfDay } from 'date-fns';
 
 import { protectRouteMiddleware } from '@middlewares/protect';
 
-import { AccessTokenPayload } from '@utils/auth/user-auth';
+import { CompleteAccessTokenPayload } from '@utils/auth/user-auth';
 import { isDateBookingCollision } from '@utils/bookings/is-date-booking-collision';
 
 import { Booking, BookingAttributes } from '@models/booking';
 import { Venue } from '@models/venue';
 import { Staff } from '@models/staff';
-import { Service } from '@models/service';
-import { CompanyAttributes } from '@models/company';
+import { mapEnumToFormattedCzechName, Service } from '@models/service';
+import { Company } from '@models/company';
 import { VenueAttributes } from '@models/venue';
+import { sendBookingConfirmationEmail } from '@utils/mailer';
+import { Region } from '@models/region';
+import { District } from '@models/district';
+import { Mop } from '@models/mop';
 
 const router = joiRouter();
 
@@ -42,15 +46,18 @@ router.route({
       allowUnauthorized: false,
     }),
     async (ctx) => {
-      const { id: userId } = ctx.state.auth as AccessTokenPayload;
+      const { id: userId, user } = ctx.state.auth as CompleteAccessTokenPayload;
 
       const body = ctx.request.body as RequestBody;
       const { venueId, staffId, serviceId, start } = body;
 
       // validate venue exists
       const venue = await Venue.findById(venueId).populate<{
-        company: CompanyAttributes;
-      }>('company');
+        region: Region;
+        district: District;
+        momc?: Mop;
+        company: Company;
+      }>(['region', 'district', 'momc', 'company']);
       if (!venue) {
         ctx.throw(400, `Venue with ID "${venueId}" not found.`);
         return;
@@ -115,6 +122,20 @@ router.route({
       const createdBooking = new Booking(bookingAttributes);
 
       await createdBooking.save();
+
+      await sendBookingConfirmationEmail({
+        to: user.email,
+        bookingDetails: {
+          venueName: venue.name,
+          venueStringAddress: `${venue.stringAddress}, ${
+            venue.momc?.name ?? venue.district.name
+          }, ${venue.region.name}`,
+          serviceName: mapEnumToFormattedCzechName(service.name),
+          staffName: staff.name,
+          start: startDate,
+          end: endDate,
+        },
+      });
 
       ctx.body = {
         success: true,
