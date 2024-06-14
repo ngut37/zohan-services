@@ -33,6 +33,7 @@ type RequestBody = CompanyFormData & {
 const requestBodySchema = {
   ico: Joi.string().length(8).required(),
   name: Joi.string().required(),
+  legalForm: Joi.number(),
 
   stringAddress: Joi.string().required(),
 
@@ -59,6 +60,7 @@ router.route({
       const {
         ico,
         name,
+        legalForm,
         stringAddress,
         regionString,
         districtString,
@@ -116,6 +118,7 @@ router.route({
       const createdCompany = new Company({
         ico,
         name,
+        legalForm,
 
         stringAddress,
 

@@ -17,6 +17,7 @@ export const mapCompanyToFormData = async (
   const {
     ico,
     name,
+    legalForm,
     stringAddress,
     region: { name: regionString },
     district: { name: districtString },
@@ -27,6 +28,7 @@ export const mapCompanyToFormData = async (
   return {
     ico,
     name,
+    legalForm,
     stringAddress,
     regionString,
     districtString,
