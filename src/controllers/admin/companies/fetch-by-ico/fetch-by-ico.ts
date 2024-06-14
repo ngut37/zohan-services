@@ -2,6 +2,7 @@ import axios from 'axios';
 import joiRouter, { Joi } from 'koa-joi-router';
 
 import { Company } from '@models/company';
+import { Mop } from '@models/mop';
 
 import {
   CompanyData,
@@ -53,7 +54,17 @@ router.route({
 
       const formattedResult = formatFetchedCompany(fetchResult.data);
 
-      const fetchedCompany = new Company({ ...formattedResult, ico });
+      let district = formattedResult?.district;
+
+      if (!district && formattedResult) {
+        const fetchedDistrictByMop = await Mop.findOne({
+          mop: formattedResult.mop,
+        });
+
+        district = fetchedDistrictByMop?.district;
+      }
+
+      const fetchedCompany = new Company({ ...formattedResult, district, ico });
 
       ctx.body = {
         success: true,

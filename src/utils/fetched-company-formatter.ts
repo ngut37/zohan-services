@@ -68,8 +68,8 @@ export const formatFetchedCompany = (
 ): RawCompany | undefined => {
   if (companyData.ico) {
     const ico = companyData.ico;
-
     const name = companyData.obchodniJmeno;
+    const legalForm = companyData.pravniForma;
 
     const {
       kodKraje: regionId,
@@ -95,6 +95,7 @@ export const formatFetchedCompany = (
     return {
       ico: ico.toString(),
       name,
+      legalForm: parseInt(legalForm, 10),
 
       stringAddress,
 
