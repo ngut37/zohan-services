@@ -46,7 +46,14 @@ type RequestBody = {
 const requestBodySchema = {
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().optional().default(''),
+  password: Joi.string()
+    .min(6)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      'password format (at least one lowercase letter, one uppercase letter, one digit)',
+    )
+    .optional()
+    .default(''),
   phoneNumber: Joi.string(),
   oAuth: {
     userId: Joi.string().required(),
