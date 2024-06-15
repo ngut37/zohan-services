@@ -45,6 +45,7 @@ router.route({
         start: {
           $lt: now,
         },
+        cancelledAt: { $exists: false },
       })
         .limit(limit)
         .skip((page - 1) * limit)
@@ -65,6 +66,7 @@ router.route({
         start: {
           $lt: now,
         },
+        cancelledAt: { $exists: false },
       });
 
       // custom projection

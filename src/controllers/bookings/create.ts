@@ -96,6 +96,7 @@ router.route({
         staff: staffId,
         start: { $gte: startOfDayDate },
         end: { $lte: endOfDayDate },
+        cancelledAt: { $exists: false },
       }).lean();
 
       const isBookingColliding = isDateBookingCollision({

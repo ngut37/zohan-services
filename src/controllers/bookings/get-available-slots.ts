@@ -78,6 +78,7 @@ router.route({
         staff: staffId,
         start: { $gte: start },
         end: { $lte: end },
+        cancelledAt: { $exists: false },
       });
 
       const availableBookingSlots = getAvailableSlots({

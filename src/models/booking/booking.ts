@@ -15,6 +15,7 @@ export type BookingAttributes = {
   service: Service['_id'];
   start: Date;
   end: Date;
+  cancelledAt?: Date;
 } & (
   | {
       existingCustomer?: never;
@@ -58,6 +59,9 @@ const schema = new Schema<BookingAttributes, BookingModel>(
     end: {
       type: Date,
       required: true,
+    },
+    cancelledAt: {
+      type: Date,
     },
     existingCustomer: {
       type: Schema.Types.ObjectId,
