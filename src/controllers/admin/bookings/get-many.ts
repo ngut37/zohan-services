@@ -45,6 +45,7 @@ router.route({
         venue: venueId,
         start: { $gte: start },
         end: { $lte: end },
+        cancelledAt: { $exists: false },
       }).populate<{ venue: Venue; service: Service; existingCustomer?: User }>([
         'venue',
         'service',

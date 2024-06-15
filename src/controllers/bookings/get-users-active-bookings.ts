@@ -32,6 +32,7 @@ router.route({
         start: {
           $gte: now,
         },
+        cancelledAt: { $exists: false },
       }).populate<{
         venue: Venue & { company: Company; district: District; momc: Momc };
         staff: Staff;
