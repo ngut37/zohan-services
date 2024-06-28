@@ -22,14 +22,14 @@ const router = joiRouter();
 
 type RequestBody = {
   venueId: string;
-  staffId: string;
+  staffId: string | null;
   serviceId: string;
   start: string;
 };
 
 const requestBodySchema = {
   venueId: Joi.string().hex().length(24).required(),
-  staffId: Joi.string().hex().length(24).required(),
+  staffId: Joi.string().hex().length(24).allow(null).required(),
   serviceId: Joi.string().hex().length(24).required(),
   start: Joi.string().isoDate().required(),
 };
@@ -63,11 +63,14 @@ router.route({
         return;
       }
 
-      // validate staff exists
-      const staff = await Staff.findById(staffId);
-      if (!staff) {
-        ctx.throw(400, `Staff with ID "${staffId}" not found.`);
-        return;
+      let staff: Staff | null = null;
+
+      if (staffId) {
+        staff = await Staff.findById(staffId);
+        if (!staff) {
+          ctx.throw(400, `Staff with ID "${staffId}" not found.`);
+          return;
+        }
       }
 
       // validate service exists
@@ -87,13 +90,52 @@ router.route({
         return;
       }
 
+      // ignore booking collisions if no staff is selected
+      if (!staff) {
+        const bookingAttributes: Omit<BookingAttributes, '_id'> = {
+          venue: new ObjectId(venueId),
+          staff: null,
+          service: new ObjectId(serviceId),
+          start: startDate,
+          end: endDate,
+          existingCustomer: new ObjectId(userId),
+        };
+
+        const createdBooking = new Booking(bookingAttributes);
+
+        await createdBooking.save();
+
+        await sendBookingConfirmationEmail({
+          to: user.email,
+          bookingDetails: {
+            venueName: venue.name,
+            venueStringAddress: `${venue.stringAddress}, ${
+              venue.momc?.name ?? venue.district.name
+            }, ${venue.region.name}`,
+            serviceName: mapEnumToFormattedCzechName(service.name),
+            start: startDate,
+            end: endDate,
+          },
+        });
+
+        ctx.body = {
+          success: true,
+          data: {
+            ...createdBooking.toObject(),
+            venue: venue.toObject(),
+            service: service.toObject(),
+          },
+        };
+        return;
+      }
+
       // validate that booking is not colliding with another booking
       // this is not optimal (querying all bookings for a venue for that day)
       const startOfDayDate = startOfDay(startDate);
       const endOfDayDate = endOfDay(startDate);
       const bookings = await Booking.find({
         venue: venueId,
-        staff: staffId,
+        staff: staff._id,
         start: { $gte: startOfDayDate },
         end: { $lte: endOfDayDate },
         cancelledAt: { $exists: false },
@@ -113,7 +155,7 @@ router.route({
 
       const bookingAttributes: Omit<BookingAttributes, '_id'> = {
         venue: new ObjectId(venueId),
-        staff: new ObjectId(staffId),
+        staff: new ObjectId(staff._id),
         service: new ObjectId(serviceId),
         start: startDate,
         end: endDate,

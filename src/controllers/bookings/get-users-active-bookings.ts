@@ -35,7 +35,7 @@ router.route({
         cancelledAt: { $exists: false },
       }).populate<{
         venue: Venue & { company: Company; district: District; momc: Momc };
-        staff: Staff;
+        staff?: Staff;
         service: Service;
       }>([
         { path: 'venue', populate: { path: 'company' } },
@@ -59,7 +59,7 @@ router.route({
             momc: venue.momc?.name,
           },
           staff: {
-            staffName: staff.name,
+            staffName: staff?.name,
           },
           service: {
             name: service.name,

@@ -11,7 +11,7 @@ import { mongoose } from '..';
 export type BookingAttributes = {
   _id: ObjectId;
   venue: Venue['_id'];
-  staff: Staff['_id'];
+  staff?: Staff['_id'] | null;
   service: Service['_id'];
   start: Date;
   end: Date;
@@ -45,7 +45,8 @@ const schema = new Schema<BookingAttributes, BookingModel>(
     staff: {
       type: Schema.Types.ObjectId,
       ref: 'Staff',
-      required: true,
+      required: false,
+      default: null,
     },
     service: {
       type: Schema.Types.ObjectId,

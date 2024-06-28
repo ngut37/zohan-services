@@ -134,7 +134,7 @@ export const sendBookingConfirmationEmail = async ({
     venueName: string;
     venueStringAddress: string;
     serviceName: string;
-    staffName: string;
+    staffName?: string;
     start: Date;
     end: Date;
   };
@@ -158,7 +158,11 @@ export const sendBookingConfirmationEmail = async ({
     <hr/>
     <ul>
       <li><b>Služba:</b> ${bookingDetails.serviceName}</li>
-      <li><b>Personál:</b> ${bookingDetails.staffName}</li>
+      ${
+        bookingDetails.staffName
+          ? `<li><b>Zaměstnanec:</b> ${bookingDetails.staffName}</li>`
+          : ''
+      }
       <li><b>Adresa:</b> ${bookingDetails.venueStringAddress}</li>
       <li><b>Začátek:</b> ${formattedStartDate}</li>
       <li><b>Konec:</b> ${formattedEndDate}</li>

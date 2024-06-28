@@ -51,7 +51,7 @@ router.route({
         .skip((page - 1) * limit)
         .populate<{
           venue: Venue & { company: Company; district: District; momc: Momc };
-          staff: Staff;
+          staff?: Staff;
           service: Service;
         }>([
           { path: 'venue', populate: { path: 'company' } },
@@ -82,9 +82,7 @@ router.route({
             district: venue.district.name,
             momc: venue.momc?.name,
           },
-          staff: {
-            staffName: staff.name,
-          },
+          ...(staff ? { staff: { staffName: staff.name } } : {}),
           service: {
             name: service.name,
             type: service.type,

@@ -18,14 +18,14 @@ const router = joiRouter();
 type RequestQuery = {
   venueId: string;
   serviceId: string;
-  staffId: string;
+  staffId?: string;
   day: string;
 };
 
 const requestQuerySchema = {
   venueId: Joi.string().hex().length(24).required(),
   serviceId: Joi.string().hex().length(24).required(),
-  staffId: Joi.string().hex().length(24).required(),
+  staffId: Joi.string().hex().length(24),
   day: Joi.string().isoDate().required(),
 };
 
@@ -59,10 +59,12 @@ router.route({
         return ctx.throw(400, 'Service does not belong to venue');
       }
 
-      const staff = await Staff.findById(staffId);
+      if (staffId) {
+        const staffExists = await Staff.exists({ _id: staffId });
 
-      if (!staff) {
-        return ctx.throw(404, 'Staff not found');
+        if (!staffExists) {
+          return ctx.throw(404, 'Staff not found');
+        }
       }
 
       const zonedTime = toZonedTime(

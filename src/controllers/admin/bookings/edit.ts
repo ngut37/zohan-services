@@ -80,7 +80,7 @@ router.route({
         return;
       }
 
-      if (venueId !== booking.venue.toString()) {
+      if (venueId && venueId !== booking.venue.toString()) {
         // validate venue exists
         const venue = await Venue.findById(venueId);
         if (!venue) {
@@ -91,7 +91,7 @@ router.route({
         booking.venue = new ObjectId(venueId);
       }
 
-      if (staffId !== booking.staff.toString()) {
+      if (staffId && (!booking.staff || staffId !== booking.staff.toString())) {
         // validate staff exists
         const staff = await Staff.findById(staffId);
         if (!staff) {
