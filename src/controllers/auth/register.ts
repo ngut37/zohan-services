@@ -47,7 +47,7 @@ const requestBodySchema = {
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string()
-    .min(6)
+    .min(8)
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       'password format (at least one lowercase letter, one uppercase letter, one digit)',

@@ -44,6 +44,7 @@ type RequestBody = {
 const requestBodySchema = {
   name: Joi.string().required(),
   email: Joi.string().email().required(),
+  // TODO: add password validation (FE validation already exists)
   password: Joi.string().required(),
   companyId: Joi.string().hex().length(24).required(),
   venueId: Joi.string().hex().length(24),
